@@ -4,31 +4,57 @@ const xmldom = require('xmldom')
 const domparser = new (xmldom.DOMParser)();
 const DOMParser = require('dom-parser')
 
-let expected = null
-let actual = null
+function returnBrowser (browser) {
+  switch(browser) {
+    case 'Chrome':
+      return 'chrome';
+    case 'Internet Explorer':
+      return 'ie';
+    case 'Microsoft Edge':
+      return 'edge';
+    case 'Mozilla Firefox':
+      return 'firefox';
+  }
+}
 
-setInterval( async function() {
-    let driver = await new Builder().forBrowser('firefox').build();
-    try {
-        postoji = await driver.get('http://localhost:8000/index.html')
+async function trackChanges (url, browser, end) {
+  let expected = null
+  let actual = null
+  let trackingTime = 100000
+  let period = 10000
+
+  browser = returnBrowser (browser);
+  
+  setTimeout(()=> {
+    clearInterval(interval);
+  }, trackingTime);
+
+  let interval = setInterval( async function() {
+    let driver = new Builder().forBrowser(browser).build();
+  try {
+        postoji = await driver.get(url)
         driver.getPageSource().then(function(source) {
-            //console.log(source);
+            console.log(source);
             if (expected == null) 
                 expected = domparser.parseFromString(source, "text/html");
             else {
-              actual = domparser.parseFromString(source, "text/html");;
+              actual = domparser.parseFromString(source, "text/html");
               compare(expected, actual);
+              expected = actual;
             }
         });
         await driver.quit();
-      } catch (err) {
-        console.log("Could not open the page!");
+    } catch (err) {
         await driver.quit();
-      }
+        console.log('Could not open the page!');
+    }
   //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
-  }, 10000);
+  }, period);
+}
 
 
+
+  
   function compare (expected, actual) {
       // compare to DOM trees, get a result object
       let result = domCompare.compare(expected, actual);
@@ -45,3 +71,7 @@ setInterval( async function() {
       // string representation
       console.log(domCompare.GroupingReporter.report(result));
   }
+
+  
+
+  module.exports.trackChanges = trackChanges;

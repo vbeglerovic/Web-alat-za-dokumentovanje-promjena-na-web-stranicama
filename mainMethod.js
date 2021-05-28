@@ -17,10 +17,11 @@ function returnBrowser (browser) {
   }
 }
 
-async function trackChanges (url, browser, end) {
+async function trackChanges (url, browser, end, start) {
   let expected = null
   let actual = null
-  let trackingTime = 100000
+  let trackingTime = new Date(end) - new Date(start);
+  console.log(trackingTime)
   let period = 10000
 
   browser = returnBrowser (browser);
@@ -31,16 +32,16 @@ async function trackChanges (url, browser, end) {
 
   let interval = setInterval( async function() {
     let driver = new Builder().forBrowser(browser).build();
-  try {
+    try {
         postoji = await driver.get(url)
         driver.getPageSource().then(function(source) {
             console.log(source);
             if (expected == null) 
                 expected = domparser.parseFromString(source, "text/html");
             else {
-              actual = domparser.parseFromString(source, "text/html");
-              compare(expected, actual);
-              expected = actual;
+                actual = domparser.parseFromString(source, "text/html");
+                compare(expected, actual);
+                expected = actual;
             }
         });
         await driver.quit();
@@ -51,7 +52,6 @@ async function trackChanges (url, browser, end) {
   //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
   }, period);
 }
-
 
 
   

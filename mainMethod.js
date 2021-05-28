@@ -4,6 +4,8 @@ const xmldom = require('xmldom')
 const domparser = new (xmldom.DOMParser)();
 const DOMParser = require('dom-parser')
 
+var interval = 0;
+
 function returnBrowser (browser) {
   switch(browser) {
     case 'Chrome':
@@ -30,7 +32,7 @@ async function trackChanges (url, browser, end, start) {
     clearInterval(interval);
   }, trackingTime);
 
-  let interval = setInterval( async function() {
+  interval = setInterval( async function() {
     let driver = new Builder().forBrowser(browser).build();
     try {
         postoji = await driver.get(url)
@@ -72,6 +74,11 @@ async function trackChanges (url, browser, end, start) {
       console.log(domCompare.GroupingReporter.report(result));
   }
 
+  async function stopTracking () {
+    clearInterval(interval);
+  }
+
   
 
   module.exports.trackChanges = trackChanges;
+  module.exports.stopTracking = stopTracking;

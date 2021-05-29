@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dokumentovanje promjena na web stranici</title>
+    <link rel="stylesheet" type="text/css" href="index.css">
+  </head>
+<body>
+    <h1>Stranica za dokumentaciju promjena detektovanih na web stranici</h1>
+    <form>
+        <label for="url">Url:</label>
+        <input type="text" id="url">
+        <label for="pretrazivaci">Pretraziva&ccaron;:</label>
+        <select id="pretrazivaci" name="pretrazivaci">
+          <option value="Chrome">Chrome</option>
+          <option value="Mozilla Firefox">Firefox</option>
+          <option value="Microsoft Edge">Microsoft Edge</option>
+          <option value="Internet Explorer">Internet Explorer</option>
+        </select>
+        <label for="kraj">Kraj: </label>
+        <input type="datetime-local" id="kraj">
+        <div>
+          <button type="button" id="btn1" onclick="documentChanges()">Po&ccaron;ni</button>
+          <button type="button" id="btn2" onclick="stopTracking()">Zaustavi</button>
+        </div>
+        <div id='notification'></div>
+    </form>  
+  <script src="index.js"></script>  
+</body>
+</html>

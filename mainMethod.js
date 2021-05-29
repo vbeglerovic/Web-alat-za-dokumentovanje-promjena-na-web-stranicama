@@ -65,26 +65,25 @@ async function trackChanges (url, browser, end, start) {
 
   
 function compare (array, expected, actual) {
-    // compare to DOM trees, get a result object
     let result = domCompare.compare(expected, actual); 
-    // get comparison result
-    if (!result.getResult()) {
-      // get all differences
-      let diff = result.getDifferences(); // array of diff-objects
-      console.log(diff)
-      for (i = 0; i < diff.length; i++) {
-        let parameters = stringMethod.getParameters(diff[i].message)
-        console.log(parameters) 
-        let newChange = {
-          id: i+1,
-          element: diff[i].node,
-          tip: "promijenjen text",
-          sadrzaj_prije: parameters['0'],
-          sadrzaj_poslije: parameters['1'],
-          datum: new Date()
-        }
-        array.push(newChange);
+    let diff = result.getDifferences(); // array of diff-objects
+    for (i = 0; i < diff.length; i++) {
+      let parameters = stringMethod.getParameters(diff[i].message)
+      let tip = "promijenjen sadržaj elementa"
+      if (diff[i].message.includes('Extra element')) {
+        tip = "dodan novi element " + parameters[0];
+        parameters[0] = "/";
+        parameters[1] = "/";
       }
+      let newChange = {
+        id: i+1,
+        element: diff[i].node,
+        tip: tip,
+        sadrzaj_prije: parameters['0'],
+        sadrzaj_poslije: parameters['1'],
+        datum: new Date()
+      }
+      array.push(newChange);
     }
   }
 

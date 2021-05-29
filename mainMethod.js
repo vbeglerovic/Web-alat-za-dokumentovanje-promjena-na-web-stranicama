@@ -3,8 +3,11 @@ const domCompare = require ('dom-compare')
 const xmldom = require('xmldom')
 const domparser = new (xmldom.DOMParser)();
 const DOMParser = require('dom-parser')
+const stringMethod = require('./stringMethod.js');
+
 
 var interval = 0;
+let array = [];
 
 function returnBrowser (browser) {
   switch(browser) {
@@ -22,58 +25,71 @@ function returnBrowser (browser) {
 async function trackChanges (url, browser, end, start) {
   let expected = null
   let actual = null
-  let trackingTime = new Date(end) - new Date(start);
-  console.log(trackingTime)
-  let period = 10000
+  let trackingTime = new Date(end) - new Date(start)
+  let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
 
   browser = returnBrowser (browser);
-  
-  setTimeout(()=> {
+
+  var driver;
+  try {
+      driver = new Builder().forBrowser(browser).build();
+      let page = await driver.get(url)
+  } catch (err) {
+      await driver.quit();
+      return 'Could not open the page!';
+  }
+  setTimeout(async function () {
     clearInterval(interval);
+    await driver.quit();
+    console.log(array)
   }, trackingTime);
 
-  interval = setInterval( async function() {
-    let driver = new Builder().forBrowser(browser).build();
+  interval = setInterval(async function() {
     try {
-        postoji = await driver.get(url)
         driver.getPageSource().then(function(source) {
-            console.log(source);
             if (expected == null) 
                 expected = domparser.parseFromString(source, "text/html");
             else {
                 actual = domparser.parseFromString(source, "text/html");
-                compare(expected, actual);
+                compare(array, expected, actual);
                 expected = actual;
             }
         });
-        await driver.quit();
     } catch (err) {
-        await driver.quit();
-        console.log('Could not open the page!');
+        console.log('Could not get page source!');
+        await driver.quit();        
     }
-  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
   }, period);
 }
 
 
   
-  function compare (expected, actual) {
-      // compare to DOM trees, get a result object
-      let result = domCompare.compare(expected, actual);
- 
-      // get comparison result
-      console.log(result.getResult()); // false cause' trees are different
- 
+function compare (array, expected, actual) {
+    // compare to DOM trees, get a result object
+    let result = domCompare.compare(expected, actual); 
+    // get comparison result
+    if (!result.getResult()) {
       // get all differences
       let diff = result.getDifferences(); // array of diff-objects
- 
-      // differences, grouped by node XPath
-      let groupedDiff = domCompare.GroupingReporter.getDifferences(result); // object, key - node XPATH, value - array of differences (strings)
- 
-      // string representation
-      console.log(domCompare.GroupingReporter.report(result));
+      console.log(diff)
+      for (i = 0; i < diff.length; i++) {
+        let parameters = stringMethod.getParameters(diff[i].message)
+        console.log(parameters) 
+        let newChange = {
+          id: i+1,
+          element: diff[i].node,
+          tip: "promijenjen text",
+          sadrzaj_prije: parameters['0'],
+          sadrzaj_poslije: parameters['1'],
+          datum: new Date()
+        }
+        array.push(newChange);
+      }
+    }
   }
 
+  
+  
   async function stopTracking () {
     clearInterval(interval);
   }

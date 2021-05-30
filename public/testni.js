@@ -12,8 +12,8 @@
         var text = document.createTextNode("Paragraf dva");
         p2.appendChild(text);
         document.getElementById('div1').appendChild(p2);
-      }, 100000);
+      }, 40000);
 
       setTimeout(()=> {
         document.getElementById('l1').innerHTML="Nova labela"
-      }, 45000);
+      }, 35000);

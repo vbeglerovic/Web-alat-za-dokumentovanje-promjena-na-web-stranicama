@@ -12,10 +12,10 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/documentChanges', (req, res) => {
+app.post('/documentChanges', async (req, res) => {
   let {url, browser, endDate, startDate} = req.body;
-  mainMethod.trackChanges(url, browser, endDate, startDate).then(function(result) {
-    res.send(result)})
+  mainMethod.trackChanges(url, browser, endDate, startDate);
+  res.send("Praćenje je počelo!");
 });
 
 app.get('/stopTracking', (req, res) => {
@@ -23,6 +23,11 @@ app.get('/stopTracking', (req, res) => {
     res.send("Praćenje zaustavljeno!"))
   })
 
+  app.get('/checkStatus', (req, res) => {
+    mainMethod.checkStatus().then(function (result) {
+      res.send(result)})
+    });
+  
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })

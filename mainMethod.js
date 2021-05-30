@@ -7,7 +7,7 @@ const stringMethod = require('./stringMethod.js');
 
 
 var interval = 0;
-let array = [];
+let status = "noTracking";
 
 function returnBrowser (browser) {
   switch(browser) {
@@ -22,27 +22,36 @@ function returnBrowser (browser) {
   }
 }
 
+
 async function trackChanges (url, browser, end, start) {
   let expected = null
   let actual = null
   let trackingTime = new Date(end) - new Date(start)
   let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
+  let array = [];
+
 
   browser = returnBrowser (browser);
 
   var driver;
   try {
-      driver = new Builder().forBrowser(browser).build();
-      let page = await driver.get(url)
-  } catch (err) {
-      await driver.quit();
-      return 'Could not open the page!';
-  }
-  setTimeout(async function () {
-    clearInterval(interval);
+    driver = new Builder().forBrowser(browser).build();
+    await driver.get(url)
+    status = "Praćenje je počelo!"
+} catch (err) {
+    status = "Stranica se ne može otvoriti!";
     await driver.quit();
-    console.log(array)
+    return;
+   };
+
+   setTimeout(async () => {
+    clearInterval(interval);
+    console.log(array);
+    await driver.quit();
+    status = "Vrijeme je isteklo, promjene su zabilježene!";
+    return;
   }, trackingTime);
+
 
   interval = setInterval(async function() {
     try {
@@ -56,8 +65,9 @@ async function trackChanges (url, browser, end, start) {
             }
         });
     } catch (err) {
-        console.log('Could not get page source!');
-        await driver.quit();        
+        status = "Ne može se dobiri izvorni kod stranice!";
+        await driver.quit();
+        return;        
     }
   }, period);
 }
@@ -67,6 +77,7 @@ async function trackChanges (url, browser, end, start) {
 function compare (array, expected, actual) {
     let result = domCompare.compare(expected, actual); 
     let diff = result.getDifferences(); // array of diff-objects
+    let brojac = array.length;
     for (i = 0; i < diff.length; i++) {
       let parameters = stringMethod.getParameters(diff[i].message)
       let tip = "promijenjen sadržaj elementa"
@@ -76,7 +87,7 @@ function compare (array, expected, actual) {
         parameters[1] = "/";
       }
       let newChange = {
-        id: i+1,
+        id: brojac+i,
         element: diff[i].node,
         tip: tip,
         sadrzaj_prije: parameters['0'],
@@ -91,9 +102,15 @@ function compare (array, expected, actual) {
   
   async function stopTracking () {
     clearInterval(interval);
+    status = "Praćenje zaustavljeno!"
+  }
+
+  async function checkStatus () {
+    return status;
   }
 
   
 
   module.exports.trackChanges = trackChanges;
   module.exports.stopTracking = stopTracking;
+  module.exports.checkStatus = checkStatus;

@@ -21,14 +21,33 @@ function validateInputData () {
   return data;
 }
 
+function checkStatusRequest () {
+  let ajax = new XMLHttpRequest();
+  ajax.onreadystatechange = function() {
+    if (ajax.readyState == 4 && ajax.status == 200) 
+      document.getElementById("notification").innerHTML = ajax.responseText;
+    if (ajax.readyState == 4 && ajax.status == 404)
+      document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
+    }
+    ajax.open('GET', "http://localhost:8000/checkStatus", true);
+    ajax.send();
+}
+
 function documentChanges () {
   let data = validateInputData();
   if (data) {
   
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
-      if (ajax.readyState == 4 && ajax.status == 200)
-        document.getElementById("notification").innerHTML = ajax.responseText;
+      if (ajax.readyState == 4 && ajax.status == 200) {
+        let trackingTime = new Date(data.endDate) - new Date(data.startDate) + 200
+        setTimeout(() => {
+          checkStatusRequest();
+      }, 2000);
+        setTimeout(() => {
+          checkStatusRequest();
+      }, trackingTime);
+      }
       if (ajax.readyState == 4 && ajax.status == 404)
         document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
     }

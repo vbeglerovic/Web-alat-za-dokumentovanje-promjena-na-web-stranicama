@@ -15,7 +15,6 @@ function validateInputData () {
     return false;
   }
   let endDate = new Date(end);
-  //let startDate = new Date();
   let resolution = document.getElementById("rezolucija");
   let value = resolution.options[resolution.selectedIndex].text;
   let width = value.split("x")[0];
@@ -24,7 +23,6 @@ function validateInputData () {
     url: url,
     browser: browser,
     endDate: endDate,
-    //startDate: startDate,
     width: width,
     height: height
   }
@@ -60,10 +58,12 @@ function setResolutions () {
 function checkStatusRequest () {
   let ajax = new XMLHttpRequest();
   ajax.onreadystatechange = function() {
-    if (ajax.readyState == 4 && ajax.status == 200) 
+    if (ajax.readyState == 4 && ajax.status == 200) {
       document.getElementById("notification").innerHTML = ajax.responseText;
+    }
     if (ajax.readyState == 4 && ajax.status == 404)
       document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
+      return ajax.responseText;
     }
     ajax.open('GET', "http://localhost:8000/checkStatus", true);
     ajax.send();
@@ -77,13 +77,13 @@ function documentChanges () {
     ajax.onreadystatechange = function() {
       if (ajax.readyState == 4 && ajax.status == 200) {
         document.getElementById("notification").innerHTML = ajax.responseText;
-        let trackingTime = new Date(data.endDate) - new Date() + 200
         setTimeout(() => {
-          checkStatusRequest();
-      }, 10000);
+          let status = checkStatusRequest();
+        }, 10000);
+        let trackingTime = new Date(data.endDate) - new Date() +1500;
         setTimeout(() => {
-          checkStatusRequest();
-      }, trackingTime);
+              checkStatusRequest()
+        }, trackingTime)
       }
       if (ajax.readyState == 4 && ajax.status == 404)
         document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";

@@ -43,6 +43,7 @@ async function trackChanges (url, browser, end, width, height) {
     driver = new Builder().forBrowser(browser).build();
     await driver.manage().window().setRect({width:x, height:y});
     await driver.get(url);
+    trackingTime = new Date(end) - new Date()
     status = "Praćenje je počelo!"
     startDate = new Date();
     
@@ -55,8 +56,8 @@ async function trackChanges (url, browser, end, width, height) {
    setTimeout(async () => {
     clearInterval(interval);
     console.log(array);
-    await driver.quit();
     status = "Vrijeme je isteklo, promjene su zabilježene!";
+    await driver.quit();
     return;
   }, trackingTime);
 
@@ -68,7 +69,7 @@ async function trackChanges (url, browser, end, width, height) {
                 expected = domparser.parseFromString(source, "text/html");
             else {
                 actual = domparser.parseFromString(source, "text/html");
-                compare(array, expected, actual);
+                compare(array, expected, actual, startDate);
                 expected = actual;
             }
         });
@@ -82,7 +83,7 @@ async function trackChanges (url, browser, end, width, height) {
 
 
   
-function compare (array, expected, actual) {
+function compare (array, expected, actual, startDate) {
     let result = domCompare.compare(expected, actual); 
     let diff = result.getDifferences(); // array of diff-objects
     let brojac = array.length;
@@ -101,7 +102,7 @@ function compare (array, expected, actual) {
         sadrzaj_prije: parameters['0'],
         sadrzaj_poslije: parameters['1'],
         datum: new Date(),
-        vrijeme: (new Date(startDate) - new Date())/1000
+        vrijeme: (new Date() - new Date(startDate))/1000
       }
       array.push(newChange);
     }

@@ -15,12 +15,18 @@ function validateInputData () {
     return false;
   }
   let endDate = new Date(end);
-  let startDate = new Date();
+  //let startDate = new Date();
+  let resolution = document.getElementById("rezolucija");
+  let value = resolution.options[resolution.selectedIndex].text;
+  let width = value.split("x")[0];
+  let height = value.split("x")[1];
   data = {
     url: url,
     browser: browser,
     endDate: endDate,
-    startDate: startDate
+    //startDate: startDate,
+    width: width,
+    height: height
   }
   return data;
 }
@@ -70,10 +76,11 @@ function documentChanges () {
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
       if (ajax.readyState == 4 && ajax.status == 200) {
-        let trackingTime = new Date(data.endDate) - new Date(data.startDate) + 200
+        document.getElementById("notification").innerHTML = ajax.responseText;
+        let trackingTime = new Date(data.endDate) - new Date() + 200
         setTimeout(() => {
           checkStatusRequest();
-      }, 2000);
+      }, 10000);
         setTimeout(() => {
           checkStatusRequest();
       }, trackingTime);

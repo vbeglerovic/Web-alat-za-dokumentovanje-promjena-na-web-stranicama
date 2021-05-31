@@ -9,6 +9,8 @@ const stringMethod = require('./stringMethod.js');
 var interval = 0;
 let status = "noTracking";
 
+
+
 function returnBrowser (browser) {
   switch(browser) {
     case 'Chrome':
@@ -23,21 +25,27 @@ function returnBrowser (browser) {
 }
 
 
-async function trackChanges (url, browser, end, start) {
+async function trackChanges (url, browser, end, width, height) {
   let expected = null
   let actual = null
-  let trackingTime = new Date(end) - new Date(start)
+  let trackingTime = new Date(end) - new Date()
   let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
   let array = [];
-
+  let startDate = new Date();
 
   browser = returnBrowser (browser);
 
+  console.log(width+" "+height)
   var driver;
+  let x = parseInt(width);
+  let y = parseInt(height)
   try {
     driver = new Builder().forBrowser(browser).build();
-    await driver.get(url)
+    await driver.manage().window().setRect({width:x, height:y});
+    await driver.get(url);
     status = "Praćenje je počelo!"
+    startDate = new Date();
+    
 } catch (err) {
     status = "Stranica se ne može otvoriti!";
     await driver.quit();
@@ -92,7 +100,8 @@ function compare (array, expected, actual) {
         tip: tip,
         sadrzaj_prije: parameters['0'],
         sadrzaj_poslije: parameters['1'],
-        datum: new Date()
+        datum: new Date(),
+        vrijeme: (new Date(startDate) - new Date())/1000
       }
       array.push(newChange);
     }

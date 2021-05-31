@@ -1,4 +1,0 @@
-[{"id":0,"element":"/html/body/p1","tip":"promijenjen sadržaj elementa","sadrzaj_prije":"Ovo je neki paragraf","sadrzaj_poslije":"Ovo je novi paragraf.","datum":"2021-05-31T20:47:04.829Z","vrijeme":30.024},
-{"id":1,"element":"/html/body/label","tip":"promijenjen sadržaj elementa","sadrzaj_prije":"Ime:","sadrzaj_poslije":"Nova labela","datum":"2021-05-31T20:47:14.847Z","vrijeme":40.042},
-{"id":2,"element":"/html/body/div","tip":"dodan novi element p","sadrzaj_prije":"/","sadrzaj_poslije":"/","datum":"2021-05-31T20:47:14.847Z","vrijeme":40.042},
-{"id":3,"element":"/html/body/h1","tip":"promijenjen sadržaj elementa","sadrzaj_prije":"Stranica za testiranje","sadrzaj_poslije":"Novi naslov","datum":"2021-05-31T20:47:54.889Z","vrijeme":80.084}]

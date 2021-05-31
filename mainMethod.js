@@ -59,7 +59,7 @@ async function trackChanges (url, browser, end, width, height) {
    setTimeout(async () => {
     clearInterval(interval);
     writeChangesInFile("dat1.txt",array);
-    status = "Vrijeme je isteklo, promjene su zabilježene!";
+    status = "Vrijeme je isteklo, možete preuzeti datoteku sa promjenama!";
     await driver.quit();
     return;
   }, trackingTime);
@@ -115,7 +115,7 @@ function compare (array, expected, actual, startDate) {
   
   async function stopTracking () {
     clearInterval(interval);
-    status = "Praćenje zaustavljeno!";
+    status = "Praćenje zaustavljeno, možete preuzeti datoteku sa promjenama!";
     writeChangesInFile("dat1.txt", array);
 
   }

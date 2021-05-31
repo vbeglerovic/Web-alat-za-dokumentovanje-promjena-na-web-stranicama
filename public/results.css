@@ -1,0 +1,103 @@
+@import url(http://fonts.googleapis.com/css?family=Gabriela);
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color:#e6f3ff;
+}
+#meni {
+    padding-left: 0;
+    height: 25px;
+    padding-top: 0.5%;
+}
+
+ul {
+    list-style-type: none;
+    background-color:  #29293d;
+    margin: 0 auto;
+    overflow: hidden;
+}
+li {
+    float: left;
+    display: inline;
+    width: 12.5%;
+    height: 40px;
+}  
+li a {
+    display: block;
+    text-align: center;
+    padding:3%;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}  
+li a:hover {
+    background-color: #1f1f2e;
+}
+#glavni {
+    width: 20%;
+    float: left;
+    padding-left: 1%;
+    box-sizing: border-box;
+}
+h2 {
+    margin-top: 2%;
+}
+#desno {
+    width: 80%;
+    box-sizing: border-box;
+    float: right;
+    padding-left: 1%;
+    padding-top: 1%;
+}
+#podnozje {
+    clear: both;
+    height: 25px;
+    padding-left: 1%;
+    padding-top:0.5%;
+}
+#podnozje p {
+    margin-top: 0%;
+}
+h1 {
+    font-size: 42pt;
+    font-family: Gabriela;
+    margin: 0;
+    padding-left: 1%;
+}
+#desno p {
+    padding-left: 1%;
+}
+
+.check {
+    width: 20px;
+    height: 20px;
+}
+td {
+    color: #ffffff;
+}
+label {
+    font-size: 28px;
+}
+#zaglavlje {
+    padding: 2%;
+}
+
+button {
+    width: 50%;
+    background-color:#1f1f2e;
+    color: white;
+    float: right;
+    height: 40px;
+    font-size: 18px;
+}
+
+#glavni2 {
+    padding: 2%;
+   background-color:#e6f3ff;
+}
+
+#glavni1 {
+    padding: 2%;
+    background-color:#29293d;
+ }

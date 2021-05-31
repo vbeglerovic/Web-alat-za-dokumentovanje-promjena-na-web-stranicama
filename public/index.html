@@ -16,6 +16,22 @@
           <option value="Microsoft Edge">Microsoft Edge</option>
           <option value="Internet Explorer">Internet Explorer</option>
         </select>
+        <label for="uredjaj">Ure&dstrok;aj:</label>
+        <select id="uredjaj" name="uredjaj" onchange="setResolutions()">
+          <option id = 'desktop' value="desktop">Desktop</option>
+          <option id = 'mobitel' value="mobitel">Mobitel</option>
+          <option id = 'tablet' value="tablet">Tablet</option>
+        </select>
+        <label for="rezolucija">Rezolucija:</label>
+        <select id="rezolucija" name="rezolucija">
+          <option value="1">1366x768</option>
+          <option value="2">1920x1080</option>
+          <option value="3">1536x864</option>
+          <option value="4">1440x900</option>
+          <option value="5">1280x720</option>
+          <option value="6">1600x900</option>
+          <option value="7">1280x800</option>
+        </select>
         <label for="kraj">Kraj: </label>
         <input type="datetime-local" id="kraj">
         <div>

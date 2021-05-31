@@ -1,3 +1,7 @@
+var mobileResolutions = ['360x640','375x667','414x896','360x780','360x760','414x736'];
+var desktopResolutions = ['1366x768','1920x1080','1536x864','1440x900','1280x720','1600x900', '1280x800']
+var tabletResolutions = ['768×1024','1280×800','800×1280','601×962','600×1024','1024×1366']
+
 function validateInputData () {
   let url = document.getElementById('url').value;
   let browser = document.getElementById('pretrazivaci').value;
@@ -19,6 +23,32 @@ function validateInputData () {
     startDate: startDate
   }
   return data;
+}
+
+function setResolutions () {
+  let lista = document.getElementById("rezolucija");
+  let size = lista.childElementCount;
+  for (let i=size-1; i>=0; i--) 
+    document.getElementById('rezolucija').remove(i)
+  if (document.getElementById("mobitel").selected) {
+    for (let i=0; i<mobileResolutions.length; i++) {
+      let opcija = document.createElement("option");
+      opcija.text = mobileResolutions[i];
+      lista.add(opcija);
+    }
+  } else if (document.getElementById("tablet").selected) {
+    for (let i=0; i<tabletResolutions.length; i++) {
+      let opcija = document.createElement("option");
+      opcija.text = tabletResolutions[i];
+      lista.add(opcija);
+    } 
+  } else {
+    for (let i=0; i<desktopResolutions.length; i++) {
+      let opcija = document.createElement("option");
+      opcija.text = desktopResolutions[i];
+      lista.add(opcija);
+    } 
+  }
 }
 
 function checkStatusRequest () {

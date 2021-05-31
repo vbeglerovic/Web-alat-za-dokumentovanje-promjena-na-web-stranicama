@@ -60,10 +60,22 @@ function checkStatusRequest () {
   ajax.onreadystatechange = function() {
     if (ajax.readyState == 4 && ajax.status == 200) {
       document.getElementById("notification").innerHTML = ajax.responseText;
+      let status = ajax.responseText+"";
+      if (status.localeCompare("Vrijeme je isteklo, promjene su zabilježene!") || status.localeCompare("Praćenje zaustavljeno!")) {
+        let img = document.createElement('img');
+        img.setAttribute("src", "txticon.png");
+        let a = document.createElement('a');
+        a.setAttribute("href", "./dat1.txt");
+        a.setAttribute("download", "dat1.txt");
+        a.setAttribute("id", "a1")
+        document.body.appendChild(a);
+        document.getElementById('a1').appendChild(img);
+        document.getElementById('download').appendChild(a);
+        }
+      
     }
     if (ajax.readyState == 4 && ajax.status == 404)
       document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
-      return ajax.responseText;
     }
     ajax.open('GET', "http://localhost:8000/checkStatus", true);
     ajax.send();
@@ -81,8 +93,8 @@ function documentChanges () {
           let status = checkStatusRequest();
         }, 10000);
         let trackingTime = new Date(data.endDate) - new Date() +1500;
-        setTimeout(() => {
-              checkStatusRequest()
+        setTimeout(async() => {
+            checkStatusRequest();
         }, trackingTime)
       }
       if (ajax.readyState == 4 && ajax.status == 404)

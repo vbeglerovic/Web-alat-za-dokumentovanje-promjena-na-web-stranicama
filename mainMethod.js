@@ -4,10 +4,13 @@ const xmldom = require('xmldom')
 const domparser = new (xmldom.DOMParser)();
 const DOMParser = require('dom-parser')
 const stringMethod = require('./stringMethod.js');
+const fs = require('fs');
 
-
+let sessions = []; 
+let array = [];
 var interval = 0;
 let status = "noTracking";
+
 
 
 
@@ -30,8 +33,8 @@ async function trackChanges (url, browser, end, width, height) {
   let actual = null
   let trackingTime = new Date(end) - new Date()
   let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
-  let array = [];
   let startDate = new Date();
+  
 
   browser = returnBrowser (browser);
 
@@ -55,7 +58,7 @@ async function trackChanges (url, browser, end, width, height) {
 
    setTimeout(async () => {
     clearInterval(interval);
-    console.log(array);
+    writeChangesInFile("dat1.txt",array);
     status = "Vrijeme je isteklo, promjene su zabilježene!";
     await driver.quit();
     return;
@@ -112,11 +115,28 @@ function compare (array, expected, actual, startDate) {
   
   async function stopTracking () {
     clearInterval(interval);
-    status = "Praćenje zaustavljeno!"
+    status = "Praćenje zaustavljeno!";
+    writeChangesInFile("dat1.txt", array);
+
   }
 
   async function checkStatus () {
     return status;
+  }
+
+  function writeChangesInFile (name, array) {
+    let data ="[";
+    console.log(array.length);
+    for (i = 0; i <array.length; i++) {
+      data=data+JSON.stringify(array[i]);
+      if (i!=array.length-1) {
+        data=data+",\n";
+      }
+    }
+    data=data+"]";
+    fs.writeFile(name, data, function (err) {
+      if (err) console.log(err);
+    });
   }
 
   

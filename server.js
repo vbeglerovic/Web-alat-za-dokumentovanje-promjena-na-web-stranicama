@@ -1,4 +1,6 @@
 const express = require('express')
+const fs = require('fs');
+const dirTree = require("directory-tree");
 const app = express()
 const port = 8000
 const mainMethod = require('./mainMethod.js');
@@ -26,6 +28,16 @@ app.get('/stopTracking', (req, res) => {
   app.get('/checkStatus', (req, res) => {
     mainMethod.checkStatus().then(function (result) {
       res.send(result)})
+    });
+
+    app.get('/allFiles', (req, res) => {
+      let path = 'allFiles/';
+      if (!fs.existsSync(path)) {
+        fs.mkdirSync(path);
+      }
+      const tree = dirTree(path);
+      res.status(200);
+      res.send(tree);
     });
   
 app.listen(port, () => {

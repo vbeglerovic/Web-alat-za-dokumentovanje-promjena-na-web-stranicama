@@ -1,11 +1,79 @@
+@import url(http://fonts.googleapis.com/css?family=Gabriela);
+
 body {
+    margin: 0;
+    padding: 0;
     background-color:#e6f3ff;
 }
-label, input, div {
+#meni {
+    padding-left: 0;
+    height: 25px;
+    padding-top: 0.5%;
+}
+
+ul {
+    list-style-type: none;
+    background-color:  #29293d;
+    margin: 0 auto;
+    overflow: hidden;
+}
+li {
+    float: left;
+    display: inline;
+    width: 12.5%;
+    height: 40px;
+}  
+li a {
+    display: block;
+    text-align: center;
+    padding:3%;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}  
+li a:hover {
+    background-color: #1f1f2e;
+}
+#glavni {
+    width: 100%;
+    padding-left: 1%;
+    box-sizing: border-box;
+}
+
+#podnozje {
+    clear: both;
+    height: 25px;
+    padding-left: 1%;
+    padding-top:0.5%;
+}
+#podnozje p {
+    margin-top: 0%;
+}
+h1 {
+    font-size: 42pt;
+    font-family: Gabriela;
+    margin: 0;
+    padding-left: 1%;
+}
+
+#zaglavlje {
+    padding: 2%;
+}
+
+button {
+    margin-top: 10%;
+    padding: 2%;
+    width: 45%;
+    height: 40px;
+    margin-left: 4%;
+    color: white;
+}
+
+label, input {
     display: block;
 }
 
-label, input, button, select, div {
+label, input, button, select {
     height: 30px;
 }
 label {
@@ -19,8 +87,8 @@ label {
 form {
     margin: 0 auto;
     width:35%;
-    padding-top: 3%;
-    margin-top: 3%;
+    padding-top: 1%;
+    margin-top: 1%;
     display: block;
 }
 input {
@@ -33,6 +101,7 @@ select {
     font-size: 18px;
     float: right;
 }
+
 button {
     margin-top: 10%;
     padding: 2%;
@@ -50,67 +119,23 @@ button {
     background-color: red;
 }
 
-div {
-    margin-top: 3%;
-    padding: 2%;
-    width: 50%;
+#podnozjeGlavni {
+    display: block;
     float: right;
-    color: red;  
+    width: 50%;
 }
+
 
 #notification {
-    margin-top: 10%;
+    padding-top: 22%;
     font-size: 24px;
-    padding-left: 8%;  
-}
+    color: red;
+    padding-left: 50%;
+  }
 
-ul {
-    list-style-type: none;
-    background-color:  #29293d;
-    margin: 0 auto;
-    overflow: hidden;
-}
-li {
-    float: left;
-    display: inline;
-    width: 12.5%;
-}  
-li a {
-    display: block;
-    text-align: center;
-    padding:3%;
-    text-decoration: none;
-    color: white;
-}  
-li a:hover {
-    background-color: #1f1f2e;
-}
-
-h1 {
-    padding-top: 4%;
-    font-size: 80;
-    text-align: center;
-}
+  #download {
+    padding-left: 50%;
+    padding-top: 2%;
+  }
 
 
-@media screen and (max-width:600px) {
-  form {
-      width: 65%;
-  }
-  select, input {
-      width:100%;
-      margin-bottom: 10%;
-      margin-top: 5%;
-  }
-  label {
-      text-align: left;
-      clear: both;
-      margin-bottom: 0;
-      font-size: 20px;
-      display: block;
-      width: 100%;
-  }
-  li {
-      width: 40%;
-  }
-}

@@ -1,50 +1,59 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Dokumentovanje promjena na web stranici</title>
+    <title>Rezultati praćenja</title>
     <link rel="stylesheet" type="text/css" href="index.css">
   </head>
-<body>
-    <ul>
-        <li><a href="index.html">Po&ccaron;etna</a></li>
-        <li><a href="results.html">Rezultati</a></li>
-    </ul>
-<h1>Stranica za dokumentovanje promjena na web stranicama</h1>
-    <form>
-        <label for="url">Url:</label>
-        <input type="text" id="url">
-        <label for="pretrazivaci">Pretra&zcaron;iva&ccaron;:</label>
-        <select id="pretrazivaci" name="pretrazivaci">
-          <option value="Chrome">Chrome</option>
-          <option value="Mozilla Firefox">Firefox</option>
-          <option value="Microsoft Edge">Microsoft Edge</option>
-          <option value="Internet Explorer">Internet Explorer</option>
-        </select>
-        <label for="uredjaj">Ure&dstrok;aj:</label>
-        <select id="uredjaj" name="uredjaj" onchange="setResolutions()">
-          <option id = 'desktop' value="desktop">Desktop</option>
-          <option id = 'mobitel' value="mobitel">Mobitel</option>
-          <option id = 'tablet' value="tablet">Tablet</option>
-        </select>
-        <label for="rezolucija">Rezolucija:</label>
-        <select id="rezolucija" name="rezolucija">
-          <option value="1">1366x768</option>
-          <option value="2">1920x1080</option>
-          <option value="3">1536x864</option>
-          <option value="4">1440x900</option>
-          <option value="5">1280x720</option>
-          <option value="6">1600x900</option>
-          <option value="7">1280x800</option>
-        </select>
-        <label for="kraj">Kraj: </label>
+<body></body>
+<div id="okvir">
+    <div id="meni">
+        <ul>
+            <li><a href="index.html">Po&ccaron;etna</a></li>
+            <li><a href="results.html">Rezultati</a></li>
+        </ul>
+	</div>
+	<div id="zaglavlje">
+		<h1>Stranica za dokumentovanje promjena na web stranicama</h1>
+	</div>
+	<div id="glavni">
+        <form>
+            <label for="url">Url:</label>
+            <input type="text" id="url">
+            <label for="pretrazivaci">Pretra&zcaron;iva&ccaron;:</label>
+            <select id="pretrazivaci" name="pretrazivaci">
+              <option value="Chrome">Chrome</option>
+              <option value="Mozilla Firefox">Firefox</option>
+              <option value="Microsoft Edge">Microsoft Edge</option>
+              <option value="Internet Explorer">Internet Explorer</option>
+            </select>
+            <label for="uredjaj">Ure&dstrok;aj:</label>
+            <select id="uredjaj" name="uredjaj" onchange="setResolutions()">
+              <option id = 'desktop' value="desktop">Desktop</option>
+              <option id = 'mobitel' value="mobitel">Mobitel</option>
+              <option id = 'tablet' value="tablet">Tablet</option>
+            </select>
+            <label for="rezolucija">Rezolucija:</label>
+            <select id="rezolucija" name="rezolucija">
+              <option value="1">1366x768</option>
+              <option value="2">1920x1080</option>
+              <option value="3">1536x864</option>
+              <option value="4">1440x900</option>
+              <option value="5">1280x720</option>
+              <option value="6">1600x900</option>
+              <option value="7">1280x800</option>
+            </select>
+            <label for="kraj">Kraj: </label>
         <input type="datetime-local" id="kraj">
-        <div>
-          <button type="button" id="btn1" onclick="documentChanges()">Po&ccaron;ni</button>
-          <button type="button" id="btn2" onclick="stopTracking()">Zaustavi</button>
+        <div id ="podnozjeGlavni">
+            <button type="button" id="btn1" onclick="documentChanges()">Po&ccaron;ni</button>
+            <button type="button" id="btn2" onclick="stopTracking()">Zaustavi</button>
         </div>
+        </form>
         <div id='notification'></div>
         <div id='download'></div>
-    </form>  
+    </div>
+	<div id="podnozje"></div>
+</div>
   <script src="index.js"></script>  
 </body>
 </html>

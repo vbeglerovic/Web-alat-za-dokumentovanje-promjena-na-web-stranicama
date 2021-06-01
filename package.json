@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/vbeglerovic/Zavrsni-rad#readme",
   "dependencies": {
+    "directory-tree": "^2.2.9",
     "dom-compare": "^0.6.0",
     "dom-parser": "^0.1.6",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
     "install": "^0.13.0",
     "npm": "^7.10.0",
     "selenium-webdriver": "^4.0.0-beta.3"

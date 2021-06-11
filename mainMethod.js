@@ -12,7 +12,7 @@ let currentTracking = {
   browser: null,
   url: null,
   width: 0,
-  heigth: 0,
+  height: 0,
   trackingTime: 0,
   interval: null,
   currentStatus: status[0],
@@ -46,7 +46,8 @@ function clearCurrentTracking () {
   currentTracking.currentStatus = status[0],
   currentTracking.startDate = null,
   currentTracking.array = [],
-  currentTracking.driver = null
+  currentTracking.driver = null,
+  currentTracking.timeout = null
 }
 
 function appendLeadingZeroes(n){
@@ -56,7 +57,7 @@ function appendLeadingZeroes(n){
   return n
 }
 
-async function trackChanges (url, browser, end, width, heigth) {
+async function trackChanges (url, browser, end, width, height) {
   clearCurrentTracking();
   let expected = null
   let actual = null
@@ -64,59 +65,51 @@ async function trackChanges (url, browser, end, width, heigth) {
 
   currentTracking.browser = returnBrowser(browser);
 
-  currentTracking.width = parseInt(width);
-  currentTracking.heigth = parseInt(heigth)
+  currentTracking.width = parseInt(width)
+  currentTracking.height = parseInt(height)
 
   try {
     currentTracking.driver = new Builder().forBrowser(currentTracking.browser).build();
-    await currentTracking.driver.manage().window().setRect({width:currentTracking.width, height:currentTracking.heigth});
+    await currentTracking.driver.manage().window().setRect({width:currentTracking.width, height:currentTracking.height});
     await currentTracking.driver.get(url);
     currentTracking.url = url;
     currentTracking.startDate = new Date();
     currentTracking.trackingTime = new Date(end) - currentTracking.startDate
-    currentTracking.currentStatus = status[1]
-    
-} catch (err) {
-  currentTracking.currentStatus = status[3]
-    await currentTracking.driver.quit();
+    currentTracking.currentStatus = status[1]    
+  } catch (err) {
+    currentTracking.currentStatus = status[3]
+    await currentTracking.driver.quit()
     return;
    };
 
    currentTracking.timeout = setTimeout(async () => {
-    clearInterval(currentTracking.interval);
-    let datetime = new Date (currentTracking.startDate);
-    let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
-    let fileName = currentTracking.browser + dateStringWithTime
-    writeChangesInFile(fileName,currentTracking.array);
-    currentTracking.currentStatus = status[2]
-    currentTracking.currentStatus.fileName = fileName + ".txt";
-    await currentTracking.driver.quit();
-    return;
-  }, currentTracking.trackingTime);
+      clearInterval(currentTracking.interval);
+      writeChangesInFile();
+      currentTracking.currentStatus = status[2]
+      await currentTracking.driver.quit();
+      return;
+    }, currentTracking.trackingTime);
 
-
-  currentTracking.interval = setInterval(async function() {
-    try {
-      currentTracking.driver.getPageSource().then(function(source) {
-            if (expected == null) 
-                expected = domparser.parseFromString(source, "text/html");
-            else {
-                actual = domparser.parseFromString(source, "text/html");
-                compare(currentTracking.array, expected, actual, currentTracking.startDate);
-                expected = actual;
-            }
+    currentTracking.interval = setInterval(async function() {
+      try {
+        currentTracking.driver.getPageSource().then(function(source) {
+          if (expected == null) 
+            expected = domparser.parseFromString(source, "text/html");
+          else {
+            actual = domparser.parseFromString(source, "text/html");
+            compare(currentTracking.array, expected, actual, currentTracking.startDate);
+            expected = actual;
+          }
         });
-    } catch (err) {
-      currentTracking.currentStatus = status[4]
-        await currentTracking.driver.quit();
+      } catch (err) {
+        currentTracking.currentStatus = status[4]
+        await currentTracking.driver.quit()
         return;        
-    }
-  }, period);
-}
-
-
+      }
+    }, period);
+  }
   
-function compare (array, expected, actual, startDate) {
+  function compare (array, expected, actual, startDate) {
     let result = domCompare.compare(expected, actual); 
     let diff = result.getDifferences(); // array of diff-objects
     let brojac = array.length;
@@ -139,19 +132,14 @@ function compare (array, expected, actual, startDate) {
       }
       array.push(newChange);
     }
-  }
-
-  
+  }  
   
   async function stopTracking () {
     clearInterval(currentTracking.interval);
-    currentTracking.currentStatus = status[5]
-    let datetime = new Date (currentTracking.startDate);
-    let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
-    let fileName = currentTracking.browser + dateStringWithTime
-    writeChangesInFile(fileName, currentTracking.array);
     clearTimeout(currentTracking.timeout);
-    currentTracking.currentStatus.fileName = fileName + ".txt";
+    await currentTracking.driver.quit();
+    currentTracking.currentStatus = status[5]
+    writeChangesInFile();
     return JSON.stringify(currentTracking.currentStatus);
 
   }
@@ -160,16 +148,20 @@ function compare (array, expected, actual, startDate) {
     return JSON.stringify(currentTracking.currentStatus);
   }
 
-  function writeChangesInFile (name, array) {
+  function writeChangesInFile () {
+    let datetime = new Date (currentTracking.startDate);
+    let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
+    let fileName = currentTracking.browser + dateStringWithTime
+    currentTracking.currentStatus.fileName = fileName + ".txt";
     let data ="[";
-    for (i = 0; i <array.length; i++) {
-      data=data+JSON.stringify(array[i]);
-      if (i!=array.length-1) {
+    for (i = 0; i <currentTracking.array.length; i++) {
+      data=data+JSON.stringify(currentTracking.array[i]);
+      if (i!=currentTracking.array.length-1) {
         data=data+",\n";
       }
     }
     data=data+"]";
-    fs.writeFile("./public/allFiles/"+name+".txt", data, function (err) {
+    fs.writeFile("./public/allFiles/"+fileName+".txt", data, function (err) {
       if (err) console.log(err);
     });
   }

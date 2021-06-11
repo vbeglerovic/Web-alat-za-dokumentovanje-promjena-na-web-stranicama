@@ -21,8 +21,8 @@ app.post('/documentChanges', async (req, res) => {
 });
 
 app.get('/stopTracking', (req, res) => {
-  mainMethod.stopTracking().then(
-    res.send("Praćenje zaustavljeno!"))
+  mainMethod.stopTracking().then(function (result) {
+    res.send(result)})
   })
 
   app.get('/checkStatus', (req, res) => {

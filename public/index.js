@@ -55,24 +55,27 @@ function setResolutions () {
   }
 }
 
+function readFile (status) {
+  if (status.id == 2 || status.id == 5) {
+    let img = document.createElement('img');
+    img.setAttribute("src", "txticon.png");
+    let a = document.createElement('a');
+    a.setAttribute("href", "./allFiles/dat1.txt");
+    a.setAttribute("download", "dat5.txt");
+    a.setAttribute("id", "a1")
+    document.body.appendChild(a);
+    document.getElementById('a1').appendChild(img);
+    document.getElementById('download').appendChild(a);
+    }
+}
+
 function checkStatusRequest () {
   let ajax = new XMLHttpRequest();
   ajax.onreadystatechange = function() {
     if (ajax.readyState == 4 && ajax.status == 200) {
-      document.getElementById("notification").innerHTML = ajax.responseText;
-      let status = ajax.responseText+"";
-      if (status.localeCompare("Vrijeme je isteklo, promjene su zabilježene!") || status.localeCompare("Praćenje zaustavljeno!")) {
-        let img = document.createElement('img');
-        img.setAttribute("src", "txticon.png");
-        let a = document.createElement('a');
-        a.setAttribute("href", "./dat1.txt");
-        a.setAttribute("download", "dat1.txt");
-        a.setAttribute("id", "a1")
-        document.body.appendChild(a);
-        document.getElementById('a1').appendChild(img);
-        document.getElementById('download').appendChild(a);
-        }
-      
+      let status = JSON.parse(ajax.responseText);
+      document.getElementById("notification").innerHTML = status.message;  
+      readFile(status);    
     }
     if (ajax.readyState == 4 && ajax.status == 404)
       document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
@@ -110,10 +113,13 @@ function documentChanges () {
 function stopTracking () {
   var ajax = new XMLHttpRequest();
   ajax.onreadystatechange = function() {
-  if (ajax.readyState == 4 && ajax.status == 200)
-    document.getElementById("notification").innerHTML = ajax.responseText;
-  if (ajax.readyState == 4 && ajax.status == 404)
-    document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
+    if (ajax.readyState == 4 && ajax.status == 200) {
+        let status = JSON.parse(ajax.responseText);
+        document.getElementById("notification").innerHTML = status.message;  
+        readFile(status); 
+    }
+    if (ajax.readyState == 4 && ajax.status == 404)
+      document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
   }
   ajax.open('GET', "http://localhost:8000/stopTracking", true);
   ajax.send();

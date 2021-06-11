@@ -2,14 +2,17 @@ const {Builder, By, Key, until} = require('selenium-webdriver')
 const domCompare = require ('dom-compare')
 const xmldom = require('xmldom')
 const domparser = new (xmldom.DOMParser)();
-const DOMParser = require('dom-parser')
-const stringMethod = require('./stringMethod.js');
 const fs = require('fs');
+
+
+const stringMethod = require('./stringMethod.js');
+
+let status = [ {id: 0, message: "Sačekajte!"}, {id: 1, message: "Praćenje je počelo!"},{id: 2, message: "Vrijeme je isteklo, možete preuzeti datoteku sa promjenama!"}, {id: 3, message:"Stranica se ne može otvoriti!"}, {id:4, message: "Ne može se dobiti izvorni kod stranice!"}, {id:5, message: "Praćenje je zaustavljeno, možete preuzeti datoteku sa promjenama!"}]
 
 let sessions = []; 
 let array = [];
 var interval = 0;
-let status = "noTracking";
+let currentStatus = status[0];
 
 
 
@@ -38,7 +41,6 @@ async function trackChanges (url, browser, end, width, height) {
 
   browser = returnBrowser (browser);
 
-  console.log(width+" "+height)
   var driver;
   let x = parseInt(width);
   let y = parseInt(height)
@@ -47,11 +49,11 @@ async function trackChanges (url, browser, end, width, height) {
     await driver.manage().window().setRect({width:x, height:y});
     await driver.get(url);
     trackingTime = new Date(end) - new Date()
-    status = "Praćenje je počelo!"
+    currentStatus = status[1]
     startDate = new Date();
     
 } catch (err) {
-    status = "Stranica se ne može otvoriti!";
+  currentStatus = status[3]
     await driver.quit();
     return;
    };
@@ -59,7 +61,7 @@ async function trackChanges (url, browser, end, width, height) {
    setTimeout(async () => {
     clearInterval(interval);
     writeChangesInFile("dat1.txt",array);
-    status = "Vrijeme je isteklo, možete preuzeti datoteku sa promjenama!";
+    currentStatus = status[2]
     await driver.quit();
     return;
   }, trackingTime);
@@ -77,7 +79,7 @@ async function trackChanges (url, browser, end, width, height) {
             }
         });
     } catch (err) {
-        status = "Ne može se dobiri izvorni kod stranice!";
+        currentStatus = status[4]
         await driver.quit();
         return;        
     }
@@ -115,13 +117,14 @@ function compare (array, expected, actual, startDate) {
   
   async function stopTracking () {
     clearInterval(interval);
-    status = "Praćenje zaustavljeno, možete preuzeti datoteku sa promjenama!";
-    writeChangesInFile("dat1.txt", array);
+    currentStatus = status[5]
+    writeChangesInFile("./public/allFiles/dat6.txt", array);
+    return JSON.stringify(currentStatus);
 
   }
 
   async function checkStatus () {
-    return status;
+    return JSON.stringify(currentStatus);
   }
 
   function writeChangesInFile (name, array) {

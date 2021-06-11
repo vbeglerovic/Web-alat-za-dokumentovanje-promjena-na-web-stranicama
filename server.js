@@ -31,7 +31,7 @@ app.get('/stopTracking', (req, res) => {
     });
 
     app.get('/allFiles', (req, res) => {
-      let path = 'allFiles/';
+      let path = 'public/allFiles/';
       if (!fs.existsSync(path)) {
         fs.mkdirSync(path);
       }

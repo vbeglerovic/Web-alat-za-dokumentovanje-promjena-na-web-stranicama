@@ -23,6 +23,7 @@ function validateInputData () {
     url: url,
     browser: browser,
     endDate: endDate,
+    startDate: new Date(),
     width: width,
     height: height
   }
@@ -60,8 +61,8 @@ function readFile (status) {
     let img = document.createElement('img');
     img.setAttribute("src", "txticon.png");
     let a = document.createElement('a');
-    a.setAttribute("href", "./allFiles/dat1.txt");
-    a.setAttribute("download", "dat5.txt");
+    a.setAttribute("href", "./allFiles/" + status.fileName);
+    a.setAttribute("download", status.fileName);
     a.setAttribute("id", "a1")
     document.body.appendChild(a);
     document.getElementById('a1').appendChild(img);
@@ -70,24 +71,29 @@ function readFile (status) {
 }
 
 function checkStatusRequest () {
-  let ajax = new XMLHttpRequest();
-  ajax.onreadystatechange = function() {
-    if (ajax.readyState == 4 && ajax.status == 200) {
-      let status = JSON.parse(ajax.responseText);
-      document.getElementById("notification").innerHTML = status.message;  
-      readFile(status);    
+  if (!document.getElementById('a1')) {
+    let ajax = new XMLHttpRequest();
+    ajax.onreadystatechange = function() {
+      if (ajax.readyState == 4 && ajax.status == 200) {
+        let status = JSON.parse(ajax.responseText);
+        document.getElementById("notification").innerHTML = status.message;  
+        readFile(status);    
+      }
+      if (ajax.readyState == 4 && ajax.status == 404)
+        document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
+      }
+      ajax.open('GET', "http://localhost:8000/checkStatus", true);
+      ajax.send();
     }
-    if (ajax.readyState == 4 && ajax.status == 404)
-      document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";
-    }
-    ajax.open('GET', "http://localhost:8000/checkStatus", true);
-    ajax.send();
 }
 
 function documentChanges () {
   let data = validateInputData();
-  if (data) {
-  
+  if (document.getElementById('a1')) {
+    let a1 = document.getElementById('a1');
+    a1.remove();
+  }
+  if (data) {  
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
       if (ajax.readyState == 4 && ajax.status == 200) {
@@ -95,9 +101,13 @@ function documentChanges () {
         setTimeout(() => {
           let status = checkStatusRequest();
         }, 10000);
+        document.getElementById("btn1").disabled = true;
+        document.getElementById("btn2").disabled = false;
         let trackingTime = new Date(data.endDate) - new Date() +1500;
         setTimeout(async() => {
             checkStatusRequest();
+            document.getElementById("btn1").disabled = false;
+            document.getElementById("btn2").disabled = true;
         }, trackingTime)
       }
       if (ajax.readyState == 4 && ajax.status == 404)
@@ -116,7 +126,9 @@ function stopTracking () {
     if (ajax.readyState == 4 && ajax.status == 200) {
         let status = JSON.parse(ajax.responseText);
         document.getElementById("notification").innerHTML = status.message;  
-        readFile(status); 
+        readFile(status);
+        document.getElementById("btn1").disabled = false;
+        document.getElementById("btn2").disabled = true; 
     }
     if (ajax.readyState == 4 && ajax.status == 404)
       document.getElementById("notification").innerHTML = "Greska: nepoznat URL!";

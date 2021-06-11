@@ -1,3 +1,0 @@
-[{"id":0,"element":"/html/body/p1","tip":"promijenjen sadržaj elementa","sadrzaj_prije":"Ovo je neki paragraf","sadrzaj_poslije":"Ovo je novi paragraf.","datum":"2021-06-11T10:02:03.160Z","vrijeme":30.029},
-{"id":1,"element":"/html/body/label","tip":"promijenjen sadržaj elementa","sadrzaj_prije":"Ime:","sadrzaj_poslije":"Nova labela","datum":"2021-06-11T10:02:13.164Z","vrijeme":40.033},
-{"id":2,"element":"/html/body/div","tip":"dodan novi element p","sadrzaj_prije":"/","sadrzaj_poslije":"/","datum":"2021-06-11T10:02:13.164Z","vrijeme":40.033}]

@@ -39,6 +39,19 @@ app.get('/stopTracking', (req, res) => {
       res.status(200);
       res.send(tree);
     });
+
+    app.post("/filesContent", (req, res) => {
+      let {fileName1, fileName2} = req.body
+      let path = 'public/allFiles/';
+      const data1 = fs.readFileSync(path + fileName1, {encoding:'utf8'});
+      const data2 = fs.readFileSync(path + fileName2, {encoding:'utf8'});
+      let response = {
+        data1: data1,
+        data2: data2
+      }
+      response = JSON.stringify(response)
+      res.send(response);
+    });
   
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

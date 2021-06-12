@@ -1,7 +1,7 @@
 
-    setTimeout(()=> {
+    /*setTimeout(()=> {
         document.getElementById('p1').innerHTML="Ovo je novi paragraf."
-      }, 25000);
+      }, 25000);*/
 
       setTimeout(()=> {
         document.getElementById('h1').innerHTML="Novi naslov"

@@ -1,4 +1,5 @@
 
+var headers = ["Element", "Tip", "Sadržaj prije", "Sadržaj poslije", "Vrijeme", "Vrijeme"]
 window.onload = function() {
     var ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
@@ -40,7 +41,34 @@ function selectiveCheck (event) {
         return false;
 }
 
+function makeTable() {
+    let table = document.createElement("table");
+    table.setAttribute("id", "table2")
+    let tr1 = document.createElement("tr");
+    for (i = 0; i < 4; i++) {
+        let th = document.createElement("th");
+        th.setAttribute("class", "empty")
+        tr1.appendChild(th);
+    }
+    let dat1 = document.createElement("th");
+    dat1.setAttribute("id", "dat1")
+    let dat2 = document.createElement("th");
+    dat2.setAttribute("id", "dat2")
+    tr1.appendChild(dat1);
+    tr1.appendChild(dat2)
+    table.appendChild(tr1)
+    let tr2 = document.createElement("tr")
+    for (i = 0; i < headers.length; i++) {
+        let th = document.createElement("th");
+        th.innerHTML = headers[i];
+        tr2.appendChild(th);
+    }
+    table.appendChild(tr2);
+    document.getElementById("desno").appendChild(table)
+}
+
 function compare () {
+    makeTable()
     var checkedChecks = document.querySelectorAll(".check:checked");
     let id1 = checkedChecks[0].id
     let id2 = checkedChecks[1].id
@@ -96,4 +124,9 @@ function compareArrays (array1, array2) {
             }
         }
     }
+}
+
+function show () {
+    let table2 = document.getElementById("table2");
+    table2.remove()
 }

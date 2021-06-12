@@ -84,14 +84,15 @@ label {
 }
 
 button {
-    width: 50%;
+    width: 40%;
     color: white;
     float: right;
     height: 40px;
     font-size: 18px;
+    margin: 5%
 }
 
-#btn1 {
+#btn1, #btn2 {
     background-color: green;
 }
 

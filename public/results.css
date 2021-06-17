@@ -106,26 +106,26 @@ button {
     background-color:#29293d;
  }
 
- #table2 {
+ .changes {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 80%;
     margin-left: 10%;
   }
   
-  #table2 td, #table2 th {
+  .changes td, .changes th {
     border: 1px solid #ddd;
     padding: 8px;
   }
   
   
-  #table2 tr:hover {background-color: #ddd;}
+  .changes tr:hover {background-color: #ddd;}
 
   #dat1 {
     background-color: white;
     }
   
-  #table2 th {
+  .changes th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: center;
@@ -133,19 +133,30 @@ button {
     color: white;
   }
 
-  #table2 td {
+  .changes td {
       background-color: white;
       color: black
   }
-  #table2 .empty {
-      background-color: #e6f3ff;
-      border: none;
-  }
 
-  #table2 #dat1 {
+
+  #dat1Tab2, #dat2Tab2, #dat1Tab3, #dat2Tab3{
       background-color: green;
   }
 
-  #table2 #dat2 {
-    background-color: green;
-}
+  #table3 {
+      margin-top: 5%;
+  } 
+
+  #data th {
+      background-color: green;
+  }
+
+  .changes .empty {
+    background-color: #e6f3ff;
+    border: none;
+ }
+
+ #data .empty {
+    background-color: #e6f3ff;
+    border: none;
+ }

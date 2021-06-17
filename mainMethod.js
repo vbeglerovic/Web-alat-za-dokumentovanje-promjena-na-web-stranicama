@@ -17,6 +17,7 @@ let currentTracking = {
   interval: null,
   currentStatus: status[0],
   startDate: null,
+  endDate: null,
   array: [],
   driver: null,
   timeout: null
@@ -30,7 +31,7 @@ function returnBrowser (browser) {
     case 'Internet Explorer':
       return 'ie';
     case 'Microsoft Edge':
-      return 'edge';
+      return 'MicrosoftEdge';
     case 'Mozilla Firefox':
       return 'firefox';
   }
@@ -45,6 +46,7 @@ function clearCurrentTracking () {
   currentTracking.interval = null,
   currentTracking.currentStatus = status[0],
   currentTracking.startDate = null,
+  currentTracking.endDate = null,
   currentTracking.array = [],
   currentTracking.driver = null,
   currentTracking.timeout = null
@@ -64,6 +66,7 @@ async function trackChanges (url, browser, end, width, height) {
   let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
 
   currentTracking.browser = returnBrowser(browser);
+  currentTracking.endDate = end
 
   currentTracking.width = parseInt(width)
   currentTracking.height = parseInt(height)
@@ -153,14 +156,24 @@ async function trackChanges (url, browser, end, width, height) {
     let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
     let fileName = currentTracking.browser + dateStringWithTime
     currentTracking.currentStatus.fileName = fileName + ".txt";
-    let data ="[";
+    let settings = {
+      preglednik: currentTracking.browser,
+      url: currentTracking.url,
+      rezolucija: currentTracking.width+"x"+currentTracking.height,
+      pocetak: currentTracking.startDate,
+      kraj: currentTracking.endDate
+    }
+    
+    let data = '{\n"podesavanja": ';
+    data = data+JSON.stringify(settings)
+    data = data+',\n"promjene": ['
     for (i = 0; i <currentTracking.array.length; i++) {
       data=data+JSON.stringify(currentTracking.array[i]);
       if (i!=currentTracking.array.length-1) {
         data=data+",\n";
       }
     }
-    data=data+"]";
+    data=data+']}';
     fs.writeFile("./public/allFiles/"+fileName+".txt", data, function (err) {
       if (err) console.log(err);
     });

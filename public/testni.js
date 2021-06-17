@@ -16,4 +16,4 @@
 
       setTimeout(()=> {
         document.getElementById('l1').innerHTML="Nova labela"
-      }, 35000);
+      }, 20000);

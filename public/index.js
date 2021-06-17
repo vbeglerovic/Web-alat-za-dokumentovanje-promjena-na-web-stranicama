@@ -14,6 +14,11 @@ function validateInputData () {
     alert("Morate unijeti datum i vrijeme do kojeg će promjene biti praćene!");
     return false;
   }
+  end = new Date(end)  
+  if (end <= new Date()) {
+    alert("Uneseni datum i vrijeme su zastarjeli, odaberite novi datum i vrijeme! ");
+    return false;
+  }
   let endDate = new Date(end);
   let resolution = document.getElementById("rezolucija");
   let value = resolution.options[resolution.selectedIndex].text;

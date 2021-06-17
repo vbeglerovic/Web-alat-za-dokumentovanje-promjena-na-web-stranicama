@@ -143,7 +143,7 @@ button {
       background-color: green;
   }
 
-  #table3 {
+  #table3,#table2 {
       margin-top: 5%;
   } 
 
@@ -160,3 +160,20 @@ button {
     background-color: #e6f3ff;
     border: none;
  }
+
+ #title1, #title2 {
+    background-color: #e6f3ff;
+    border: none;
+    color: black;
+    font-size: 24px;
+    text-align: left;
+ }
+
+ #data {
+    border-collapse: separate;
+    border-spacing: 7px 7px;
+  }
+
+  #data th {
+    background-color:#29293d;
+  }

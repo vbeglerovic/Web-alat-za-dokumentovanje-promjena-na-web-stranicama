@@ -51,6 +51,13 @@ function makeFirstTable() {
     let table = document.createElement("table");
     table.setAttribute("id", "table2")
     table.setAttribute("class", "changes")
+    let titleTr = document.createElement("tr")
+    let title = document.createElement("th")
+    title.innerHTML = "Tabela promjena kod kojih je sadržaj prije i sadržaj poslije isti:"
+    title.setAttribute("id", "title1")
+    title.colSpan = "6"
+    titleTr.appendChild(title)
+    table.appendChild(title)
     let tr1 = document.createElement("tr");
     for (i = 0; i < 4; i++) {
         let th = document.createElement("th");
@@ -84,6 +91,13 @@ function makeSecondTable () {
     let table = document.createElement("table");
     table.setAttribute("id", "table3")
     table.setAttribute("class", "changes")
+    let titleTr = document.createElement("tr")
+    let title = document.createElement("th")
+    title.innerHTML = "Tabela promjena istih elemenata:"
+    title.setAttribute("id", "title2")
+    title.colSpan = "6"
+    titleTr.appendChild(title)
+    table.appendChild(title)
     let tr1 = document.createElement("tr");
     let th = document.createElement("th");
     th.setAttribute("class", "empty")
@@ -144,6 +158,10 @@ function updateTableWithData (table, settings1, settings2, fileName1, fileName2)
 }
 
 function compare () {
+    if (document.getElementById("data")) {
+        let table = document.getElementById("data")
+        table.remove();
+    }
     let table = document.createElement("table");
     table.setAttribute("id", "data")
     table.setAttribute("class", "changes")

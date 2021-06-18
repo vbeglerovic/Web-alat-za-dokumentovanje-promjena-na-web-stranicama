@@ -3,6 +3,7 @@ const domCompare = require ('dom-compare')
 const xmldom = require('xmldom')
 const domparser = new (xmldom.DOMParser)();
 const fs = require('fs');
+const moment = require('moment');
 
 const stringMethod = require('./stringMethod.js');
 
@@ -65,19 +66,20 @@ async function trackChanges (url, browser, end, width, height) {
   let actual = null
   let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
 
-  currentTracking.browser = returnBrowser(browser);
-  currentTracking.endDate = end
+  currentTracking.browser = browser;
+  currentTracking.endDate = moment(end).format("DD.MM.YYYY HH:mm:ss")   
 
   currentTracking.width = parseInt(width)
   currentTracking.height = parseInt(height)
-
+  let date = new Date();
   try {
-    currentTracking.driver = new Builder().forBrowser(currentTracking.browser).build();
+    currentTracking.driver = new Builder().forBrowser(returnBrowser(currentTracking.browser)).build();
     await currentTracking.driver.manage().window().setRect({width:currentTracking.width, height:currentTracking.height});
     await currentTracking.driver.get(url);
     currentTracking.url = url;
-    currentTracking.startDate = new Date();
-    currentTracking.trackingTime = new Date(end) - currentTracking.startDate
+    date = new Date();
+    currentTracking.startDate = moment().format("DD.MM.YYYY HH:mm:ss")    
+    currentTracking.trackingTime = new Date(end) - date
     currentTracking.currentStatus = status[1]    
   } catch (err) {
     currentTracking.currentStatus = status[3]
@@ -100,7 +102,7 @@ async function trackChanges (url, browser, end, width, height) {
             expected = domparser.parseFromString(source, "text/html");
           else {
             actual = domparser.parseFromString(source, "text/html");
-            compare(currentTracking.array, expected, actual, currentTracking.startDate);
+            compare(currentTracking.array, expected, actual, date);
             expected = actual;
           }
         });
@@ -116,24 +118,31 @@ async function trackChanges (url, browser, end, width, height) {
     let result = domCompare.compare(expected, actual); 
     let diff = result.getDifferences(); // array of diff-objects
     let brojac = array.length;
+    console.log(diff)
     for (i = 0; i < diff.length; i++) {
-      let parameters = stringMethod.getParameters(diff[i].message)
-      let tip = "promijenjen sadržaj elementa"
-      if (diff[i].message.includes('Extra element')) {
-        tip = "dodan novi element " + parameters[0];
-        parameters[0] = "/";
-        parameters[1] = "/";
-      }
+      if (diff[i].node.includes("body")) {
+          let parameters = stringMethod.getParameters(diff[i].message)
+          let tip = "promijenjen sadržaj elementa"
+          if (diff[i].message.includes('Extra element')) {
+            tip = "dodan novi element " + parameters[0];
+            parameters[0] = "/";
+            parameters[1] = "/";
+          } else if (diff[i].message.includes('Extra atribute')) {
+            tip = "dodan novi atribut " + parameters[0];
+            parameters[0]="/",
+            parameters[1]="/"
+          }
       let newChange = {
         id: brojac+i,
         element: diff[i].node,
         tip: tip,
         sadrzaj_prije: parameters['0'],
         sadrzaj_poslije: parameters['1'],
-        datum: new Date(),
+        datum: moment().format("DD.MM.YYYY HH:mm:ss"),
         vrijeme: (new Date() - new Date(startDate))/1000
       }
       array.push(newChange);
+    }
     }
   }  
   
@@ -152,9 +161,13 @@ async function trackChanges (url, browser, end, width, height) {
   }
 
   function writeChangesInFile () {
-    let datetime = new Date (currentTracking.startDate);
-    let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
-    let fileName = currentTracking.browser + dateStringWithTime
+    //let datetime = new Date (currentTracking.startDate);
+    //let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
+    let dateStringWithTime = currentTracking.startDate.replace(/\./g, "")
+    dateStringWithTime = dateStringWithTime.replace(/\:/g, "")
+    dateStringWithTime = dateStringWithTime.replace(/ /g, "")
+    let browser = currentTracking.browser.replace(/ /g, "")
+    let fileName = browser + dateStringWithTime
     currentTracking.currentStatus.fileName = fileName + ".txt";
     let settings = {
       preglednik: currentTracking.browser,

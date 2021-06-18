@@ -1,7 +1,7 @@
 
-    /*setTimeout(()=> {
+    setTimeout(()=> {
         document.getElementById('p1').innerHTML="Ovo je novi paragraf."
-      }, 25000);*/
+      }, 25000);
 
       setTimeout(()=> {
         document.getElementById('h1').innerHTML="Novi naslov"
@@ -17,3 +17,8 @@
       setTimeout(()=> {
         document.getElementById('l1').innerHTML="Nova labela"
       }, 20000);
+
+      setTimeout(()=> {
+        document.getElementById('l1').style.background="black"
+        document.getElementById("l1").style.fontSize="12px"
+      }, 27000);

@@ -1,6 +1,6 @@
 
 var headers1 = ["Element", "Type", "Before", "After", "Date and time", "Date and Time"]
-var headers2 = ["Element", "Before", "After", "Date and time", "Before", "After","Date and time"]
+var headers2 = ["Element", "Type", "Before", "After", "Date and time", "Before", "After","Date and time"]
 var data = ["Browser", "Url", "Resolution", "Start date and time", "End date and time"]
 
 window.onload = function() {
@@ -57,7 +57,7 @@ function makeFirstTable() {
     table.setAttribute("class", "changes")
     let titleTr = document.createElement("tr")
     let title = document.createElement("th")
-    title.innerHTML = "Tabela promjena kod kojih je sadržaj prije i sadržaj poslije isti:"
+    title.innerHTML = "Common changes (all parameters except time are the same):"
     title.setAttribute("id", "title1")
     title.colSpan = "6"
     titleTr.appendChild(title)
@@ -95,7 +95,7 @@ function makeSecondTable () {
     table.setAttribute("class", "changes")
     let titleTr = document.createElement("tr")
     let title = document.createElement("th")
-    title.innerHTML = "Tabela promjena istih elemenata:"
+    title.innerHTML = "Common changes (elements and types are the same, the times are about the same)"
     title.setAttribute("id", "title2")
     title.colSpan = "6"
     titleTr.appendChild(title)
@@ -104,6 +104,9 @@ function makeSecondTable () {
     let th = document.createElement("th");
     th.setAttribute("class", "empty")
     tr1.appendChild(th);
+    let th2 = document.createElement("th");
+    th2.setAttribute("class", "empty")
+    tr1.appendChild(th2);
 
     let dat1 = document.createElement("th");
     dat1.setAttribute("id", "dat1Tab3")
@@ -205,7 +208,9 @@ function compareStrings (string1, string2) {
     string2 = string2.replace(/ /g, "")
     let array1 = string1.split(";")
     let array2 = string2.split(";")
+    if (array1[array1.length-1]=="")
     array1.pop()
+    if (array2[array2.length-1]=="")
     array2.pop()
     array1 = JSON.stringify(array1.sort())
     array2 = JSON.stringify(array2.sort())
@@ -220,9 +225,13 @@ function compareArrays (array1, array2) {
         for (let j = 0; j < array2.length; j++) {
             if (array1[i].element.toString() == array2[j].element.toString() && array1[i].type.toString() == array2[j].type.toString() && compareStrings(array1[i].before, array2[j].before) &&  compareStrings(array1[i].after, array2[j].after)) {
                 insertRowInFirstTable(array1[i], array2[j])
-                break;
+                break
             }
-            else if (array1[i].element.toString() == array2[j].element.toString() && Math.abs(array1[i].time-array2[j].time)<=5) { 
+        }
+    }
+    for (let i = 0; i < array1.length; i++) {
+        for (let j = 0; j < array2.length; j++) {
+            if (array1[i].type.toString() == array2[j].type.toString() && array1[i].element.toString() == array2[j].element.toString() && Math.abs(array1[i].time-array2[j].time)<=5) { 
                 insertRowInSecondTable(array1[i], array2[j]);
                 break
             }
@@ -257,6 +266,8 @@ function insertRowInSecondTable (change1, change2) {
     let tr = document.createElement('tr');
                 let tdElement = document.createElement('td');
                 tdElement.innerHTML = change1.element
+                let tdType = document.createElement('td');
+                tdType.innerHTML = change1.type
                 let tdPrije1 = document.createElement('td');
                 tdPrije1.innerHTML = change1.before
                 let tdPoslije1 = document.createElement('td');
@@ -270,6 +281,7 @@ function insertRowInSecondTable (change1, change2) {
                 let tdTime2 = document.createElement('td');
                 tdTime2.innerHTML = change2.time
                 tr.appendChild(tdElement);
+                tr.appendChild(tdType);
                 tr.appendChild(tdPrije1);
                 tr.appendChild(tdPoslije1);
                 tr.appendChild(tdTime1);

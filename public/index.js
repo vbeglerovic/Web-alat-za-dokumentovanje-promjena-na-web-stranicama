@@ -4,8 +4,8 @@ var tabletResolutions = ['768×1024','1280×800','800×1280','601×962','600×10
 
 function validateInputData () {
   let url = document.getElementById('url').value;
-  let browser = document.getElementById('pretrazivaci').value;
-  let end = document.getElementById('kraj').value;
+  let browser = document.getElementById('browsers').value;
+  let end = document.getElementById('end').value;
   if (url == "") {
     alert("Morate unijeti url stranice čije promjene želite da dokumentujete!");
     return false;
@@ -20,7 +20,7 @@ function validateInputData () {
     return false;
   }
   let endDate = new Date(end);
-  let resolution = document.getElementById("rezolucija");
+  let resolution = document.getElementById("resolution");
   let value = resolution.options[resolution.selectedIndex].text;
   let width = value.split("x")[0];
   let height = value.split("x")[1];
@@ -36,11 +36,11 @@ function validateInputData () {
 }
 
 function setResolutions () {
-  let lista = document.getElementById("rezolucija");
+  let lista = document.getElementById("resolution");
   let size = lista.childElementCount;
   for (let i=size-1; i>=0; i--) 
-    document.getElementById('rezolucija').remove(i)
-  if (document.getElementById("mobitel").selected) {
+    document.getElementById('resolution').remove(i)
+  if (document.getElementById("mobilePhone").selected) {
     for (let i=0; i<mobileResolutions.length; i++) {
       let opcija = document.createElement("option");
       opcija.text = mobileResolutions[i];

@@ -1,4 +1,4 @@
-const stringMethod = require('./stringMethod.js');
+const extractParameters = require('./extractParameters.js');
 const moment = require('moment');
 
 function addChangeInArray(element, type, before, after, array, startDate) {
@@ -20,7 +20,7 @@ function getChanges (diff, array, startDate) {
     for (i = 0; i < diff.length; i++) {
         if (diff[i].node.includes("body")) {
             let type = "";
-            let parameters = stringMethod.getParameters(diff[i].message);
+            let parameters = extractParameters.getParameters(diff[i].message);
             if (parameters.length == 1 && !diff[i].message.includes("missed")) {
                 type = diff[i].message;
                 addChangeInArray(diff[i].node, type, "","", array, startDate)

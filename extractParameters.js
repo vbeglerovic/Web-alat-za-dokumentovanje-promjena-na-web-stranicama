@@ -15,9 +15,4 @@ function getParameters (text) {
     return newArray;
 }
 
-function getParametersBySemicolonAndColon (text) {
-    let newArray = text.split(";")
-    newArray = newArray.split(":")
-}
-
 module.exports.getParameters = getParameters;

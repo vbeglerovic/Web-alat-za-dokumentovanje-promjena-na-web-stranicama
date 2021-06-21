@@ -98,7 +98,7 @@ async function trackChanges (url, browser, end, width, height) {
             actual = domparser.parseFromString(source, "text/html");;
             let result = domCompare.compare(expected, actual);
             let diff = result.getDifferences()
-            extractChanges.documentChanges(diff, currentTracking.array, date)
+            extractChanges.getChanges(diff, currentTracking.array, date)
             expected = actual;
           }
         });
@@ -126,8 +126,6 @@ async function trackChanges (url, browser, end, width, height) {
   }
 
   function writeChangesInFile () {
-    //let datetime = new Date (currentTracking.startDate);
-    //let dateStringWithTime = appendLeadingZeroes(datetime.getDate()) + appendLeadingZeroes(datetime.getMonth() + 1) + datetime.getFullYear() + appendLeadingZeroes(datetime.getHours()) + appendLeadingZeroes(datetime.getMinutes()) + appendLeadingZeroes(datetime.getSeconds())
     let dateStringWithTime = currentTracking.startDate.replace(/\./g, "")
     dateStringWithTime = dateStringWithTime.replace(/\:/g, "")
     dateStringWithTime = dateStringWithTime.replace(/ /g, "")
@@ -135,11 +133,11 @@ async function trackChanges (url, browser, end, width, height) {
     let fileName = browser + dateStringWithTime
     currentTracking.currentStatus.fileName = fileName + ".txt";
     let settings = {
-      preglednik: currentTracking.browser,
+      browser: currentTracking.browser,
       url: currentTracking.url,
-      rezolucija: currentTracking.width+"x"+currentTracking.height,
-      pocetak: currentTracking.startDate,
-      kraj: currentTracking.endDate
+      resolution: currentTracking.width+"x"+currentTracking.height,
+      startDateTime: currentTracking.startDate,
+      endDateTime: currentTracking.endDate
     }
     
     let data = '{\n"podesavanja": ';

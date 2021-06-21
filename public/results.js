@@ -201,20 +201,24 @@ function compare () {
 }
 
 function compareStrings (string1, string2) {
+    string1 = string1.replace(/ /g, "")
+    string2 = string2.replace(/ /g, "")
     let array1 = string1.split(";")
     let array2 = string2.split(";")
-    var x = array1.map()
-    var y = array2.map()
-    if (x.isEqual(y))
+    array1.pop()
+    array2.pop()
+    array1 = JSON.stringify(array1.sort())
+    array2 = JSON.stringify(array2.sort())
+    if (array1 == array2 )
         return true
     return false
+    
 }
 
 function compareArrays (array1, array2) {
     for (let i = 0; i < array1.length; i++) {
         for (let j = 0; j < array2.length; j++) {
-            if (array1[i].element.toString() == array2[j].element.toString() && array1[i].type.toString() == array2[j].type.toString() && array1[i].before.toString() == array2[j].before.toString() && array1[i].after.toString() == array2[j].after.toString()) {
-                console.log(array1[i].after)
+            if (array1[i].element.toString() == array2[j].element.toString() && array1[i].type.toString() == array2[j].type.toString() && compareStrings(array1[i].before, array2[j].before) &&  compareStrings(array1[i].after, array2[j].after)) {
                 insertRowInFirstTable(array1[i], array2[j])
                 break;
             }

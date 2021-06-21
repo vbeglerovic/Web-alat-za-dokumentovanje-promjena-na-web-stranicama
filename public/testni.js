@@ -20,8 +20,8 @@
       }, 20000);
 
       setTimeout(()=> {
-        document.getElementById('l1').style.background="black"
         document.getElementById("l1").style.fontSize="12px"
+        document.getElementById('l1').style.background="black"
         document.getElementById("l1").innerHTML="Viki"
       }, 50000);
 

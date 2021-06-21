@@ -200,13 +200,28 @@ function compare () {
     ajax.send(data);
 }
 
+function compareStrings (string1, string2) {
+    let array1 = string1.split(";")
+    let array2 = string2.split(";")
+    var x = array1.map()
+    var y = array2.map()
+    if (x.isEqual(y))
+        return true
+    return false
+}
+
 function compareArrays (array1, array2) {
     for (let i = 0; i < array1.length; i++) {
         for (let j = 0; j < array2.length; j++) {
-            if (array1[i].element.toString() == array2[j].element.toString() && array1[i].type.toString() == array2[j].type.toString() && array1[i].before.toString() == array2[j].before.toString() && array1[i].after.toString() == array2[j].after.toString())
+            if (array1[i].element.toString() == array2[j].element.toString() && array1[i].type.toString() == array2[j].type.toString() && array1[i].before.toString() == array2[j].before.toString() && array1[i].after.toString() == array2[j].after.toString()) {
+                console.log(array1[i].after)
                 insertRowInFirstTable(array1[i], array2[j])
-            else if (array1[i].element.toString() == array2[j].element.toString() && Math.abs(array1[i].time-array2[j].time)<=5) 
+                break;
+            }
+            else if (array1[i].element.toString() == array2[j].element.toString() && Math.abs(array1[i].time-array2[j].time)<=5) { 
                 insertRowInSecondTable(array1[i], array2[j]);
+                break
+            }
         }
     }
 }

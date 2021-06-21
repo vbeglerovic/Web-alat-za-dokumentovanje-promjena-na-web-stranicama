@@ -8,7 +8,7 @@ const moment = require('moment');
 
 const documentChanges = require('./documentChanges.js');
 
-let status = [ {id: 0, message: "Sačekajte!"}, {id: 1, message: "Praćenje je počelo!"},{id: 2, message: "Vrijeme je isteklo, možete preuzeti datoteku sa promjenama!", fileName: ""}, {id: 3, message:"Stranica se ne može otvoriti!"}, {id:4, message: "Ne može se dobiti izvorni kod stranice!"}, {id:5, message: "Praćenje je zaustavljeno, možete preuzeti datoteku sa promjenama!", fileName:""}]
+let status = [ {id: 0, message: "Wait..."}, {id: 1, message: "Tracking has been started!"},{id: 2, message: "Time is up, you can download the change file!", fileName: ""}, {id: 3, message:"Could not open the page!"}, {id:4, message: "Can not get source code of page!"}, {id:5, message: "Tracking has been stopped, you can download the change file!", fileName:""}]
 
 let currentTracking = {
   browser: null,
@@ -111,6 +111,7 @@ async function trackChanges (url, browser, end, width, height) {
   function compare (array, expected, actual, startDate) {
     let result = domCompare.compare(expected, actual);
     let diff = result.getDifferences()
+    console.log(diff)
     documentChanges.documentChanges(diff, array, startDate)
   }  
   

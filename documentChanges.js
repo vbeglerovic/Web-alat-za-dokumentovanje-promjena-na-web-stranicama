@@ -23,7 +23,7 @@ function documentChanges (diff, array, startDate) {
             let parameters = stringMethod.getParameters(diff[i].message);
             if (parameters.length == 1 && !diff[i].message.includes("missed")) {
                 type = diff[i].message;
-                addChangeInArray(diff[i].node, type, "","", array)
+                addChangeInArray(diff[i].node, type, "","", array, startDate)
             } else if (parameters.length == 2 && diff[i].message.includes("Expected element")) {
                 red.push(parameters[1]);
                 if (!removeElement || (removeElement && parameters[0]!=red[red.length-removed-1])) { 
@@ -32,7 +32,9 @@ function documentChanges (diff, array, startDate) {
                   type = "Removed element " + parameters[0]
                   addChangeInArray(diff[i].node, type, "", "", array, startDate)
                 } else
-                  removeElement = true; 
+                  removeElement = true;
+                if (parameters[0].toString().toLowerCase() == "script") 
+                   addChangeInArray(diff[i].node, "Extra element " + parameters[1], "", "", array, startDate)
             } else if (parameters.length == 2 && diff[i].message.includes("Expected text")) {
                 type = "Content changed";
                 addChangeInArray(diff[i].node, type, parameters[0], parameters[1], array, startDate)

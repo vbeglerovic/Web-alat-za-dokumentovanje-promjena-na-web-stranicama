@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 app.post('/documentChanges', async (req, res) => {
   let {url, browser, endDate, width, height} = req.body;
   mainMethod.trackChanges(url, browser, endDate, width, height);
-  res.send("Sačekajte...");
+  res.send("Wait...");
 });
 
 app.get('/stopTracking', (req, res) => {

@@ -23,9 +23,14 @@
         document.getElementById('l1').style.background="black"
         document.getElementById("l1").style.fontSize="12px"
         document.getElementById("l1").innerHTML="Viki"
-      }, 27000);
+      }, 50000);
 
       setTimeout(()=> {
         document.getElementById('p1').remove()
-        document.getElementById('l1').remove()
-      }, 50000);
+        let h1 = document.createElement("h1")
+        h1.innerHTML = "Vikica"
+        document.body.appendChild(h1)
+        let h2 = document.createElement("h1")
+        h2.innerHTML = "Vikica2"
+        document.body.appendChild(h2)
+      }, 45000);

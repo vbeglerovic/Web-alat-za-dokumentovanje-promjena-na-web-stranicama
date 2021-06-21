@@ -6,7 +6,7 @@ const fs = require('fs');
 const moment = require('moment');
 
 
-const documentChanges = require('./documentChanges.js');
+const extractChanges = require('./extractChanges.js');
 
 let status = [ {id: 0, message: "Wait..."}, {id: 1, message: "Tracking has been started!"},{id: 2, message: "Time is up, you can download the change file!", fileName: ""}, {id: 3, message:"Could not open the page!"}, {id:4, message: "Can not get source code of page!"}, {id:5, message: "Tracking has been stopped, you can download the change file!", fileName:""}]
 
@@ -95,8 +95,10 @@ async function trackChanges (url, browser, end, width, height) {
           if (expected == null) 
             expected = domparser.parseFromString(source, "text/html");
           else {
-            actual = domparser.parseFromString(source, "text/html");
-            compare(currentTracking.array, expected, actual, date);
+            actual = domparser.parseFromString(source, "text/html");;
+            let result = domCompare.compare(expected, actual);
+            let diff = result.getDifferences()
+            extractChanges.documentChanges(diff, currentTracking.array, date)
             expected = actual;
           }
         });
@@ -108,12 +110,6 @@ async function trackChanges (url, browser, end, width, height) {
     }, period);
   }
    
-  function compare (array, expected, actual, startDate) {
-    let result = domCompare.compare(expected, actual);
-    let diff = result.getDifferences()
-    console.log(diff)
-    documentChanges.documentChanges(diff, array, startDate)
-  }  
   
   async function stopTracking () {
     clearInterval(currentTracking.interval);

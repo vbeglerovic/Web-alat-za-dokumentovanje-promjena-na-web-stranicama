@@ -13,7 +13,7 @@ function addChangeInArray(element, type, before, after, array, startDate) {
       }
     array.push(newChange);
 }
-function documentChanges (diff, array, startDate) {
+function getChanges (diff, array, startDate) {
     let red = [];
     let removeElement = false;
     let removed = 0;
@@ -46,4 +46,4 @@ function documentChanges (diff, array, startDate) {
     }
 }
 
-module.exports.documentChanges = documentChanges;
+module.exports.getChanges = getChanges;

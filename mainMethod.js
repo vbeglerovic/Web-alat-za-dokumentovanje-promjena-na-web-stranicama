@@ -98,6 +98,7 @@ async function trackChanges (url, browser, end, width, height) {
             actual = domparser.parseFromString(source, "text/html");;
             let result = domCompare.compare(expected, actual);
             let diff = result.getDifferences()
+            console.log(diff)
             extractChanges.getChanges(diff, currentTracking.array, date)
             expected = actual;
           }

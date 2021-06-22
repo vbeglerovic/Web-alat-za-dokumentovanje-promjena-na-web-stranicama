@@ -21,10 +21,11 @@ function getChanges (diff, array, startDate) {
         if (diff[i].node.includes("body")) {
             let type = "";
             let parameters = extractParameters.getParameters(diff[i].message);
-            if (parameters.length == 1 && !diff[i].message.includes("missed")) {
+            if (parameters.length == 1 && (!diff[i].message.includes("missed") || (diff[i].message.includes("missed") && !removeElement))) {
                 type = diff[i].message;
                 addChangeInArray(diff[i].node, type, "","", array, startDate)
             } else if (parameters.length == 2 && diff[i].message.includes("Expected element")) {
+                removeElement = false;
                 red.push(parameters[1]);
                 if (!removeElement || (removeElement && parameters[0]!=red[red.length-removed-1])) { 
                   removed= removed+1; 
@@ -36,9 +37,11 @@ function getChanges (diff, array, startDate) {
                 if (parameters[0].toString().toLowerCase() == "script") 
                    addChangeInArray(diff[i].node, "Extra element " + parameters[1], "", "", array, startDate)
             } else if (parameters.length == 2 && diff[i].message.includes("Expected text")) {
+                removeElement = false;
                 type = "Content changed";
                 addChangeInArray(diff[i].node, type, parameters[0], parameters[1], array, startDate)
             } else if (parameters.length == 3 && diff[i].message.includes("style")) {
+                removeElement = false;
                 type = "Atributes changed"
                 addChangeInArray(diff[i].node, type, parameters[1], parameters[2], array, startDate)
             }

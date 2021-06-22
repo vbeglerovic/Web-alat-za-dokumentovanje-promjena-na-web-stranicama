@@ -95,7 +95,7 @@ function makeSecondTable () {
     table.setAttribute("class", "changes")
     let titleTr = document.createElement("tr")
     let title = document.createElement("th")
-    title.innerHTML = "Common changes (elements and types are the same, the times are about the same)"
+    title.innerHTML = "Common changes (elements and types are the same, the times are about the same):"
     title.setAttribute("id", "title2")
     title.colSpan = "6"
     titleTr.appendChild(title)

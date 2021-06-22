@@ -3,20 +3,11 @@
         document.getElementById('p1').innerHTML="Ovo je novi paragraf."
       }, 25000);
 
-      setTimeout(()=> {
-        document.getElementById('h1').innerHTML="Novi naslov"
-      }, 75000);
-
-      setTimeout(()=> {
-        var p2 = document.createElement("p");
-        var text = document.createTextNode("Paragrafcic");
-        p2.appendChild(text);
-        document.getElementById('div1').appendChild(p2);
-      }, 40000);
-
+    
       setTimeout(()=> {
         document.getElementById('l1').innerHTML="Labelica"
         document.getElementById("p1").style.backgroundColor="orange"
+        document.getElementById("link").remove()
       }, 20000);
 
       setTimeout(()=> {

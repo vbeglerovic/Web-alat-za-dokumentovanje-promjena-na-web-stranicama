@@ -98,7 +98,6 @@ async function trackChanges (url, browser, end, width, height) {
             actual = domparser.parseFromString(source, "text/html");;
             let result = domCompare.compare(expected, actual);
             let diff = result.getDifferences()
-            console.log(diff)
             extractChanges.getChanges(diff, currentTracking.array, date)
             expected = actual;
           }
@@ -115,6 +114,7 @@ async function trackChanges (url, browser, end, width, height) {
   async function stopTracking () {
     clearInterval(currentTracking.interval);
     clearTimeout(currentTracking.timeout);
+    currentTracking.endDate = new Date()
     await currentTracking.driver.quit();
     currentTracking.currentStatus = status[5]
     writeChangesInFile();
@@ -141,7 +141,7 @@ async function trackChanges (url, browser, end, width, height) {
       endDateTime: currentTracking.endDate
     }
     
-    let data = '{\n"podesavanja": ';
+    let data = '{\n"postavke": ';
     data = data+JSON.stringify(settings)
     data = data+',\n"promjene": ['
     for (i = 0; i <currentTracking.array.length; i++) {

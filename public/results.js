@@ -192,7 +192,7 @@ function compare () {
         let data = JSON.parse(ajax.responseText); 
         let array1 = JSON.parse(data.data1).promjene;
         let array2 = JSON.parse(data.data2).promjene;
-        updateTableWithData(table, JSON.parse(data.data1).podesavanja, JSON.parse(data.data2).podesavanja, label1, label2)
+        updateTableWithData(table, JSON.parse(data.data1).postavke, JSON.parse(data.data2).postavke, label1, label2)
         compareArrays (array1, array2);
 
       }

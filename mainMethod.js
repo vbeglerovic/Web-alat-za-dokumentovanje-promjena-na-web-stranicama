@@ -18,8 +18,8 @@ let currentTracking = {
   trackingTime: 0,
   interval: null,
   currentStatus: status[0],
-  startDate: null,
-  endDate: null,
+  startDateTime: null,
+  endDateTime: null,
   array: [],
   driver: null,
   timeout: null
@@ -47,8 +47,8 @@ function clearCurrentTracking () {
   currentTracking.trackingTime = 0,
   currentTracking.interval = null,
   currentTracking.currentStatus = status[0],
-  currentTracking.startDate = null,
-  currentTracking.endDate = null,
+  currentTracking.startDateTime = null,
+  currentTracking.endDateTime = null,
   currentTracking.array = [],
   currentTracking.driver = null,
   currentTracking.timeout = null
@@ -61,7 +61,7 @@ async function trackChanges (url, browser, end, width, height) {
   let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
 
   currentTracking.browser = browser;
-  currentTracking.endDate = moment(end).format("DD.MM.YYYY HH:mm:ss")   
+  currentTracking.endDateTime = moment(end).format("DD.MM.YYYY HH:mm:ss")   
 
   currentTracking.width = parseInt(width)
   currentTracking.height = parseInt(height)
@@ -114,12 +114,11 @@ async function trackChanges (url, browser, end, width, height) {
   async function stopTracking () {
     clearInterval(currentTracking.interval);
     clearTimeout(currentTracking.timeout);
-    currentTracking.endDate = moment().format("DD.MM.YYYY HH:mm:ss")
+    currentTracking.endDateTime = moment().format("DD.MM.YYYY HH:mm:ss")
     await currentTracking.driver.quit();
     currentTracking.currentStatus = status[5]
     writeChangesInFile();
     return JSON.stringify(currentTracking.currentStatus);
-
   }
 
   async function checkStatus () {                        
@@ -139,20 +138,20 @@ async function trackChanges (url, browser, end, width, height) {
       url: currentTracking.url,
       resolution: currentTracking.width+"x"+currentTracking.height,
       startDateTime: currentTracking.startDate,
-      endDateTime: currentTracking.endDate
+      endDateTime: currentTracking.endDateTime
     }
     
-    let data = '{"data": ';
-    data = data+JSON.stringify(data)
-    data = data+',\n"changes":[\n'
+    let dataToWrite = '{"data": ';
+    dataToWrite = dataToWrite+JSON.stringify(data)
+    dataToWrite = dataToWrite+',\n"changes":[\n'
     for (i = 0; i <currentTracking.array.length; i++) {
-      data=data+JSON.stringify(currentTracking.array[i]);
+      dataToWrite=dataToWrite+JSON.stringify(currentTracking.array[i]);
       if (i!=currentTracking.array.length-1) {
-        data=data+",\n";
+        dataToWrite=dataToWrite+",\n";
       }
     }
-    data=data+']}';
-    fs.writeFile("./public/allFiles/"+fileName+".txt", data, function (err) {
+    dataToWrite=dataToWrite+']}';
+    fs.writeFile("./public/allFiles/"+fileName, dataToWrite, function (err) {
       if (err) console.log(err);
     });
   }

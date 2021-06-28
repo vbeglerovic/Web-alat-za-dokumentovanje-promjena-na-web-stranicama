@@ -10,10 +10,6 @@ app.use(express.urlencoded());
 
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
 app.post('/documentChanges', async (req, res) => {
   let {url, browser, endDate, width, height} = req.body;
   mainMethod.trackChanges(url, browser, endDate, width, height);
@@ -36,7 +32,6 @@ app.get('/stopTracking', (req, res) => {
         fs.mkdirSync(path);
       }
       const tree = dirTree(path);
-      res.status(200);
       res.send(tree);
     });
 

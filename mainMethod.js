@@ -114,7 +114,7 @@ async function trackChanges (url, browser, end, width, height) {
   async function stopTracking () {
     clearInterval(currentTracking.interval);
     clearTimeout(currentTracking.timeout);
-    currentTracking.endDate = new Date()
+    currentTracking.endDate = moment().format("DD.MM.YYYY HH:mm:ss")
     await currentTracking.driver.quit();
     currentTracking.currentStatus = status[5]
     writeChangesInFile();

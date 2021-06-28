@@ -40,7 +40,7 @@ function getChanges (diff, array, startDate) {
                 removeElement = false;
                 type = "Content changed";
                 addChangeInArray(diff[i].node, type, parameters[0], parameters[1], array, startDate)
-            } else if (parameters.length == 3 && diff[i].message.includes("style")) {
+            } else if (parameters.length == 3) {
                 removeElement = false;
                 type = "Attributes changed"
                 addChangeInArray(diff[i].node, type, parameters[1], parameters[2], array, startDate)

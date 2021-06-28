@@ -1,6 +1,6 @@
 
-var headers1 = ["Element", "Type", "Before", "After", "Date and time", "Date and Time"]
-var headers2 = ["Element", "Type", "Before", "After", "Date and time", "Before", "After","Date and time"]
+var headers1 = ["Element", "Type", "Before", "After", "Time", "Time"]
+var headers2 = ["Element", "Type", "Before", "After", "Time", "Before", "After","Time"]
 var data = ["Browser", "Url", "Resolution", "Start date and time", "End date and time"]
 
 window.onload = function() {

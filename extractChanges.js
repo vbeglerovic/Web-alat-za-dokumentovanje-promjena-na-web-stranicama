@@ -30,7 +30,7 @@ function getChanges (diff, array, startDate) {
                 if (!removeElement || (removeElement && parameters[0]!=red[red.length-removed-1])) { 
                   removed= removed+1; 
                   removeElement = true; 
-                  type = "Removed element " + parameters[0]
+                  type = "Element " + parameters[0] + " is missed!"
                   addChangeInArray(diff[i].node, type, "", "", array, startDate)
                 } else
                   removeElement = true;
@@ -42,7 +42,7 @@ function getChanges (diff, array, startDate) {
                 addChangeInArray(diff[i].node, type, parameters[0], parameters[1], array, startDate)
             } else if (parameters.length == 3 && diff[i].message.includes("style")) {
                 removeElement = false;
-                type = "Atributes changed"
+                type = "Attributes changed"
                 addChangeInArray(diff[i].node, type, parameters[1], parameters[2], array, startDate)
             }
         }

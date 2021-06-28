@@ -127,13 +127,14 @@ async function trackChanges (url, browser, end, width, height) {
   }
 
   function writeChangesInFile () {
-    let dateStringWithTime = currentTracking.startDate.replace(/\./g, "")
-    dateStringWithTime = dateStringWithTime.replace(/\:/g, "")
-    dateStringWithTime = dateStringWithTime.replace(/ /g, "")
+    let dateAndTimeString = currentTracking.startDate.replace(/\./g, "")
+    dateAndTimeString = dateAndTimeString.replace(/\:/g, "")
+    dateAndTimeString = dateAndTimeString.replace(/ /g, "")
     let browser = currentTracking.browser.replace(/ /g, "")
-    let fileName = browser + dateStringWithTime
-    currentTracking.currentStatus.fileName = fileName + ".txt";
-    let settings = {
+    let fileName = browser + dateAndTimeString + ".txt"
+    currentTracking.currentStatus.fileName = fileName;
+
+    let data = {
       browser: currentTracking.browser,
       url: currentTracking.url,
       resolution: currentTracking.width+"x"+currentTracking.height,
@@ -141,9 +142,9 @@ async function trackChanges (url, browser, end, width, height) {
       endDateTime: currentTracking.endDate
     }
     
-    let data = '{\n"postavke": ';
-    data = data+JSON.stringify(settings)
-    data = data+',\n"promjene": ['
+    let data = '{"data": ';
+    data = data+JSON.stringify(data)
+    data = data+',\n"changes":[\n'
     for (i = 0; i <currentTracking.array.length; i++) {
       data=data+JSON.stringify(currentTracking.array[i]);
       if (i!=currentTracking.array.length-1) {

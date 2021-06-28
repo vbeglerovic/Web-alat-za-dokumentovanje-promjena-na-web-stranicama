@@ -190,9 +190,9 @@ function compare () {
     ajax.onreadystatechange = function() {
       if (ajax.readyState == 4 && ajax.status == 200) {
         let data = JSON.parse(ajax.responseText); 
-        let array1 = JSON.parse(data.data1).promjene;
-        let array2 = JSON.parse(data.data2).promjene;
-        updateTableWithData(table, JSON.parse(data.data1).postavke, JSON.parse(data.data2).postavke, label1, label2)
+        let array1 = JSON.parse(data.data1).changes;
+        let array2 = JSON.parse(data.data2).changes;
+        updateTableWithData(table, JSON.parse(data.data1).data, JSON.parse(data.data2).data, label1, label2)
         compareArrays (array1, array2);
 
       }

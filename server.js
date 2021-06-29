@@ -4,6 +4,7 @@ const dirTree = require("directory-tree");
 const app = express()
 const port = 8000
 const mainMethod = require('./mainMethod.js');
+const compare = require('./compare.js');
 
 app.use(express.static('public'))
 app.use(express.urlencoded());
@@ -35,16 +36,24 @@ app.get('/stopTracking', (req, res) => {
       res.send(tree);
     });
 
-    app.post("/filesContent", (req, res) => {
+    app.post("/compare", (req, res) => {
       let {fileName1, fileName2} = req.body
       let path = 'public/allFiles/';
-      const data1 = fs.readFileSync(path + fileName1, {encoding:'utf8'});
-      const data2 = fs.readFileSync(path + fileName2, {encoding:'utf8'});
+      let file1 = fs.readFileSync(path + fileName1, {encoding:'utf8'});
+      let file2 = fs.readFileSync(path + fileName2, {encoding:'utf8'});
+      file1 = JSON.parse(file1)
+      file2 = JSON.parse(file2)
+    
+      let changes = compare.compareArrays(file1.changes, file2.changes)
+
       let response = {
-        data1: data1,
-        data2: data2
+        data1: file1.data,
+        data2: file2.data,
+        changes1: changes.changes1,
+        changes2: changes.changes2
       }
-      response = JSON.stringify(response)
+      console.log(changes.changesArray1)
+      JSON.stringify(response)
       res.send(response);
     });
   

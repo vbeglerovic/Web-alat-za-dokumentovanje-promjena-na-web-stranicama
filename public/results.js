@@ -1,6 +1,6 @@
 
-var headers1 = ["Element", "Type", "Before", "After", "Time", "Time"]
-var headers2 = ["Element", "Type", "Before", "After", "Time", "Before", "After","Time"]
+var headers1 = ["Element", "Type", "Before", "After", "Time (s)", "Time (s)"]
+var headers2 = ["Element", "Type", "Before", "After", "Time (s)", "Before", "After","Time (s)"]
 var data = ["Browser", "Url", "Resolution", "Start date and time", "End date and time"]
 
 window.onload = function() {
@@ -47,7 +47,7 @@ function selectiveCheck (event) {
         return false;
 }
 
-function makeFirstTable() {
+function makeFirstTable(array) {
     if (document.getElementById("table2")) {
         let table = document.getElementById("table2")
         table.remove()
@@ -85,7 +85,7 @@ function makeFirstTable() {
     document.getElementById("desno").appendChild(table)
 }
 
-function makeSecondTable () {
+function makeSecondTable (array) {
     if (document.getElementById("table3")) {
         let table = document.getElementById("table3")
         table.remove()
@@ -148,7 +148,6 @@ function updateTableWithData (table, settings1, settings2, fileName1, fileName2)
     secondRow.appendChild(dat1)
     let thirdRow = document.createElement("tr")
     thirdRow.appendChild(dat2)
-    console.log(settings1)
     for (i = 0; i < Object.keys(settings1).length; i++) {
         let td1 = document.createElement("td")
         td1.innerHTML = Object.values(settings1)[i]
@@ -189,70 +188,36 @@ function compare () {
     let ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function() {
       if (ajax.readyState == 4 && ajax.status == 200) {
-        let data = JSON.parse(ajax.responseText); 
-        let array1 = JSON.parse(data.data1).changes;
-        let array2 = JSON.parse(data.data2).changes;
-        updateTableWithData(table, JSON.parse(data.data1).data, JSON.parse(data.data2).data, label1, label2)
-        compareArrays (array1, array2);
+        let response = JSON.parse(ajax.responseText); 
+        updateTableWithData(table, response.data1, response.data2, label1, label2)
+        for (i = 0; i < response.changes1.length; i++)
+            insertRowInFirstTable(response.changes1[i])
+        for (i = 0; i < response.changes2.length; i++)
+            insertRowInSecondTable(response.changes2[i])
+        
 
       }
     }
-    ajax.open('POST', "http://localhost:8000/filesContent", true);
+    ajax.open('POST', "http://localhost:8000/compare", true);
     ajax.setRequestHeader("Content-type", "application/json");
     data = JSON.stringify(data)
     ajax.send(data);
 }
 
-function compareStrings (string1, string2) {
-    string1 = string1.replace(/ /g, "")
-    string2 = string2.replace(/ /g, "")
-    let array1 = string1.split(";")
-    let array2 = string2.split(";")
-    if (array1[array1.length-1]=="")
-    array1.pop()
-    if (array2[array2.length-1]=="")
-    array2.pop()
-    array1 = JSON.stringify(array1.sort())
-    array2 = JSON.stringify(array2.sort())
-    if (array1 == array2 )
-        return true
-    return false
-    
-}
-
-function compareArrays (array1, array2) {
-    for (let i = 0; i < array1.length; i++) {
-        for (let j = 0; j < array2.length; j++) {
-            if (array1[i].element.toString() == array2[j].element.toString() && array1[i].type.toString() == array2[j].type.toString() && compareStrings(array1[i].before, array2[j].before) &&  compareStrings(array1[i].after, array2[j].after)) {
-                insertRowInFirstTable(array1[i], array2[j])
-                break
-            }
-        }
-    }
-    for (let i = 0; i < array1.length; i++) {
-        for (let j = 0; j < array2.length; j++) {
-            if (array1[i].type.toString() == array2[j].type.toString() && array1[i].element.toString() == array2[j].element.toString() && Math.abs(array1[i].time-array2[j].time)<=5) { 
-                insertRowInSecondTable(array1[i], array2[j]);
-                break
-            }
-        }
-    }
-}
-
-function insertRowInFirstTable (change1, change2) {
+function insertRowInFirstTable (change) {
     let tr = document.createElement('tr');
                 let tdElement = document.createElement('td');
-                tdElement.innerHTML = change1.element
+                tdElement.innerHTML = change.element
                 let tdTip = document.createElement('td');
-                tdTip.innerHTML = change1.type 
+                tdTip.innerHTML = change.type 
                 let tdPrije = document.createElement('td');
-                tdPrije.innerHTML = change1.before
+                tdPrije.innerHTML = change.before
                 let tdPoslije = document.createElement('td');
-                tdPoslije.innerHTML = change1.after
+                tdPoslije.innerHTML = change.after
                 let tdTime1 = document.createElement('td');
-                tdTime1.innerHTML = change1.time
+                tdTime1.innerHTML = change.time1
                 let tdTime2 = document.createElement('td');
-                tdTime2.innerHTML = change2.time
+                tdTime2.innerHTML = change.time2
                 tr.appendChild(tdElement);
                 tr.appendChild(tdTip);
                 tr.appendChild(tdPrije);
@@ -262,24 +227,24 @@ function insertRowInFirstTable (change1, change2) {
                 document.getElementById("table2").appendChild(tr)
 }
 
-function insertRowInSecondTable (change1, change2) {
+function insertRowInSecondTable (change) {
     let tr = document.createElement('tr');
                 let tdElement = document.createElement('td');
-                tdElement.innerHTML = change1.element
+                tdElement.innerHTML = change.element
                 let tdType = document.createElement('td');
-                tdType.innerHTML = change1.type
+                tdType.innerHTML = change.type
                 let tdPrije1 = document.createElement('td');
-                tdPrije1.innerHTML = change1.before
+                tdPrije1.innerHTML = change.before1
                 let tdPoslije1 = document.createElement('td');
-                tdPoslije1.innerHTML = change1.after
+                tdPoslije1.innerHTML = change.after1
                 let tdTime1 = document.createElement('td');
-                tdTime1.innerHTML = change1.time
+                tdTime1.innerHTML = change.time1
                 let tdPrije2 = document.createElement('td');
-                tdPrije2.innerHTML = change2.before
+                tdPrije2.innerHTML = change.before2
                 let tdPoslije2 = document.createElement('td');
-                tdPoslije2.innerHTML = change2.after
+                tdPoslije2.innerHTML = change.after2
                 let tdTime2 = document.createElement('td');
-                tdTime2.innerHTML = change2.time
+                tdTime2.innerHTML = change.time2
                 tr.appendChild(tdElement);
                 tr.appendChild(tdType);
                 tr.appendChild(tdPrije1);

@@ -8,7 +8,7 @@ const moment = require('moment');
 
 const extractChanges = require('./extractChanges.js');
 
-let status = [ {id: 0, message: "Wait..."}, {id: 1, message: "Tracking has been started!"},{id: 2, message: "Time is up, you can download the change file!", fileName: ""}, {id: 3, message:"Could not open the page!"}, {id:4, message: "Can not get source code of page!"}, {id:5, message: "Tracking has been stopped, you can download the change file!", fileName:""}]
+let status = [ {id: 0, message: "Wait..."}, {id: 1, message: "Tracking has been started!"},{id: 2, message: "Time is up, you can download the file with changes!", fileName: ""}, {id: 3, message:"Could not open the page!"}, {id:4, message: "Could not get source code of page!"}, {id:5, message: "Tracking has been stopped, you can download the file with changes!", fileName:""}]
 
 let currentTracking = {
   browser: null,
@@ -58,7 +58,7 @@ async function trackChanges (url, browser, end, width, height) {
   clearCurrentTracking();
   let expected = null
   let actual = null
-  let period = 10000  //treba oko 10000 ms jer ne stigne zatvoriti prethodno otvorenu stranicu
+  let period = 5000  
 
   currentTracking.browser = browser;
   currentTracking.endDateTime = moment(end).format("DD.MM.YYYY HH:mm:ss")   
@@ -70,6 +70,12 @@ async function trackChanges (url, browser, end, width, height) {
     currentTracking.driver = new Builder().forBrowser(returnBrowser(currentTracking.browser)).build();
     await currentTracking.driver.manage().window().setRect({width:currentTracking.width, height:currentTracking.height});
     await currentTracking.driver.get(url);
+    let title = await currentTracking.driver.getTitle();
+    if (title == "Error") {
+      currentTracking.currentStatus = status[3]
+      await currentTracking.driver.quit()
+      return;
+    }
     currentTracking.url = url;
     date = new Date();
     currentTracking.startDate = moment().format("DD.MM.YYYY HH:mm:ss")    

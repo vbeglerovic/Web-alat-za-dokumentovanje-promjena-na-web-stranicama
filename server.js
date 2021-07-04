@@ -12,8 +12,8 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 app.post('/documentChanges', async (req, res) => {
-  let {url, browser, endDate, width, height} = req.body;
-  mainMethod.trackChanges(url, browser, endDate, width, height);
+  let {url, browser, endDateTime, width, height} = req.body;
+  mainMethod.trackChanges(url, browser, endDateTime, width, height);
   res.send("Wait...");
 });
 

@@ -7,19 +7,19 @@ function validateInputData () {
   let browser = document.getElementById('browsers').value;
   let end = document.getElementById('end').value;
   if (url == "") {
-    alert("Morate unijeti url stranice čije promjene želite da dokumentujete!");
+    alert("Enter the url of the page whose changes you want to document!!");
     return false;
   }
   if (end == "") {
-    alert("Morate unijeti datum i vrijeme do kojeg će promjene biti praćene!");
+    alert("Select the date and time when tracking will be stopped!");
     return false;
   }
   end = new Date(end)  
   if (end <= new Date()) {
-    alert("Uneseni datum i vrijeme su zastarjeli, odaberite novi datum i vrijeme! ");
+    alert("Select future data and time");
     return false;
   }
-  let endDate = new Date(end);
+  let endDateTime = new Date(end);
   let resolution = document.getElementById("resolution");
   let value = resolution.options[resolution.selectedIndex].text;
   let width = value.split("x")[0];
@@ -27,7 +27,7 @@ function validateInputData () {
   data = {
     url: url,
     browser: browser,
-    endDate: endDate,
+    endDateTime: endDateTime,
     startDate: new Date(),
     width: width,
     height: height
@@ -82,6 +82,13 @@ function checkStatusRequest () {
       if (ajax.readyState == 4 && ajax.status == 200) {
         let status = JSON.parse(ajax.responseText);
         document.getElementById("notification").innerHTML = status.message;  
+        if (status.id == 1) {
+          document.getElementById("btn1").disabled = true;
+          document.getElementById("btn2").disabled = false;
+        } else {
+          document.getElementById("btn1").disabled = false;
+          document.getElementById("btn2").disabled = true;
+        }
         readFile(status);    
       }
       if (ajax.readyState == 4 && ajax.status == 404)
@@ -106,9 +113,7 @@ function documentChanges () {
         setTimeout(() => {
           let status = checkStatusRequest();
         }, 10000);
-        document.getElementById("btn1").disabled = true;
-        document.getElementById("btn2").disabled = false;
-        let trackingTime = new Date(data.endDate) - new Date() +1500;
+        let trackingTime = new Date(data.endDateTime) - new Date() +1500;
         setTimeout(async() => {
             checkStatusRequest();
             document.getElementById("btn1").disabled = false;
